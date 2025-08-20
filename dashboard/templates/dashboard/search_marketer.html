@@ -1,0 +1,429 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "بحث عن مسوق - ترافيكو" %}</title>
+    <meta name="description" content="{% trans 'ابحث عن المسوقين، عرض وتحديث بياناتهم وطلباتهم على منصة ترافيكو.' %}">
+    <meta name="keywords" content="{% trans 'ترافيكو, بحث مسوق, إدارة المسوقين, الطلبات, المكافآت, السحوبات' %}">
+    <link rel="canonical" href="{% url 'dashboard:search_marketer' %}">
+    <meta property="og:title" content="{% trans 'بحث عن مسوق - ترافيكو' %}">
+    <meta property="og:description" content="{% trans 'تحكم في بيانات المسوقين، الطلبات، المكافآت، والسحوبات بسهولة مع منصة ترافيكو.' %}">
+    <meta property="og:image" content="https://i.postimg.cc/fRb07jH3/serch-mosawek.jpg">
+    <meta property="og:url" content="{% url 'dashboard:search_marketer' %}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'بحث عن مسوق - ترافيكو' %}">
+    <meta name="twitter:description" content="{% trans 'ابحث عن المسوقين وتحكم في بياناتهم وطلباتهم بسهولة في منصة ترافيكو.' %}">
+    <meta name="twitter:image" content="https://i.postimg.cc/fRb07jH3/serch-mosawek.jpg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://trafico.com/#organization",
+                "name": "Trafico",
+                "url": "https://trafico.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.postimg.cc/FzSYsKp6/logo-1.jpg"
+                },
+                "sameAs": [
+                    "https://www.facebook.com/share/1ENADaTtSn/",
+                    "https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==",
+                    "https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1",
+                    "https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09"
+                ]
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://trafico.com/search-marketer/#webpage",
+                "url": "{% url 'dashboard:search_marketer' %}",
+                "name": "{% trans 'بحث عن مسوق - ترافيكو' %}",
+                "description": "{% trans 'ابحث عن المسوقين، عرض وتحديث بياناتهم وطلباتهم على منصة ترافيكو.' %}",
+                "breadcrumb": {
+                    "@id": "https://trafico.com/search-marketer/#breadcrumb"
+                },
+                "inLanguage": "{{ LANGUAGE_CODE }}"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://trafico.com/search-marketer/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trafico",
+                        "item": "https://trafico.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{% trans 'بحث عن مسوق' %}",
+                        "item": "{% url 'dashboard:search_marketer' %}"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/search_marketer.css' %}?v={% now 'U' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="{% if request.session.theme %}{{ request.session.theme }}{% else %}light-mode{% endif %}">
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+        <button class="hamburger" aria-label="Toggle Menu">☰</button>
+        <div class="nav-links">
+            <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
+            <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
+            <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
+            <a href="{% url 'products:cart' %}" class="nav-link icon" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">🛒</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users:logout' %}" class="nav-link" data-en="Logout" data-ar="{% trans 'تسجيل الخروج' %}">{% trans "تسجيل الخروج" %}</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link" data-en="Login" data-ar="{% trans 'تسجيل الدخول' %}">{% trans "تسجيل الدخول" %}</a>
+            {% endif %}
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-title-en="Toggle Dark Mode" data-title-ar="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-title-en="Toggle Language" data-title-ar="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 data-en="Search Marketer" data-ar="{% trans 'بحث عن مسوق' %}">{% trans "بحث عن مسوق" %}</h1>
+            <p data-en="Search for marketers and manage their data and requests on the Trafico platform." data-ar="{% trans 'ابحث عن المسوقين وتحكم في بياناتهم وطلباتهم على منصة ترافيكو.' %}">{% trans "ابحث عن المسوقين وتحكم في بياناتهم وطلباتهم على منصة ترافيكو." %}</p>
+        </div>
+    </div>
+    <main class="container">
+
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="form-error notification {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="form-section">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username" data-en="Username" data-ar="{% trans 'اسم المستخدم' %}">{% trans "اسم المستخدم" %}</label>
+                    <input type="text" name="username" id="username" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="period" data-en="Period" data-ar="{% trans 'الفترة' %}">{% trans "الفترة" %}</label>
+                    <select name="period" id="period" class="form-input">
+                        <option value="month" {% if period == 'month' %}selected{% endif %} data-en="Last 30 Days" data-ar="{% trans 'آخر 30 يوم' %}">{% trans "آخر 30 يوم" %}</option>
+                        <option value="90days" {% if period == '90days' %}selected{% endif %} data-en="Last 90 Days" data-ar="{% trans 'آخر 90 يوم' %}">{% trans "آخر 90 يوم" %}</option>
+                        <option value="year" {% if period == 'year' %}selected{% endif %} data-en="Last Year" data-ar="{% trans 'آخر سنة' %}">{% trans "آخر سنة" %}</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary" data-en="Search" data-ar="{% trans 'بحث' %}">{% trans "بحث" %}</button>
+            </form>
+        </div>
+        {% if marketer %}
+            <div class="section">
+                <h3 data-en="Marketer Details" data-ar="{% trans 'بيانات المسوق' %}">{% trans "بيانات المسوق" %}</h3>
+                <form method="post" action="{% url 'dashboard:update_marketer' marketer.username %}">
+                    {% csrf_token %}
+                    <div class="form-section">
+                        <h4 data-en="Basic Information" data-ar="{% trans 'البيانات الأساسية' %}">{% trans "البيانات الأساسية" %}</h4>
+                        <div class="form-group">
+                            <label for="username" data-en="Username" data-ar="{% trans 'اسم المستخدم' %}">{% trans "اسم المستخدم" %}</label>
+                            <input type="text" name="username" value="{{ marketer.username }}" class="form-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_type" data-en="User Type" data-ar="{% trans 'نوع المستخدم' %}">{% trans "نوع المستخدم" %}</label>
+                            <input type="text" name="user_type" value="{{ marketer.get_user_type_display }}" class="form-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" data-en="Email" data-ar="{% trans 'البريد الإلكتروني' %}">{% trans "البريد الإلكتروني" %}</label>
+                            <input type="email" name="email" id="email" value="{{ marketer.email }}" class="form-input" required>
+                            {% if form.errors.email %}
+                                <span class="error">{{ form.errors.email }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="first_name" data-en="First Name" data-ar="{% trans 'الاسم الأول' %}">{% trans "الاسم الأول" %}</label>
+                            <input type="text" name="first_name" id="first_name" value="{{ marketer.first_name }}" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name" data-en="Last Name" data-ar="{% trans 'الاسم الأخير' %}">{% trans "الاسم الأخير" %}</label>
+                            <input type="text" name="last_name" id="last_name" value="{{ marketer.last_name }}" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone_number" data-en="Phone Number" data-ar="{% trans 'رقم الهاتف' %}">{% trans "رقم الهاتف" %}</label>
+                            <input type="text" name="phone_number" id="phone_number" value="{{ marketer.phone_number }}" class="form-input" pattern="\+?[0-9]{10,15}" title="{% trans 'رقم الهاتف يجب أن يكون بين 10 و15 رقمًا' %}">
+                        </div>
+                        <div class="form-group">
+                            <label for="total_earnings" data-en="Total Earnings" data-ar="{% trans 'إجمالي الأرباح' %}">{% trans "إجمالي الأرباح" %}</label>
+                            <input type="number" step="0.01" name="total_earnings" id="total_earnings" value="{{ total_earnings|floatformat:2 }}" class="form-input" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="is_active" data-en="Account Active" data-ar="{% trans 'الحساب مفعل' %}">{% trans "الحساب مفعل" %}</label>
+                            <select name="is_active" id="is_active" class="form-input">
+                                <option value="true" {% if marketer.is_active %}selected{% endif %} data-en="Yes" data-ar="{% trans 'نعم' %}">{% trans "نعم" %}</option>
+                                <option value="false" {% if not marketer.is_active %}selected{% endif %} data-en="No" data-ar="{% trans 'لا' %}">{% trans "لا" %}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h4 data-en="Additional Information" data-ar="{% trans 'البيانات الإضافية' %}">{% trans "البيانات الإضافية" %}</h4>
+                        {% if profile %}
+                            <div class="form-group">
+                                <label for="full_name" data-en="Full Name" data-ar="{% trans 'الاسم الكامل' %}">{% trans "الاسم الكامل" %}</label>
+                                <input type="text" name="full_name" id="full_name" value="{{ profile.full_name }}" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="date_of_birth" data-en="Date of Birth" data-ar="{% trans 'تاريخ الميلاد' %}">{% trans "تاريخ الميلاد" %}</label>
+                                <input type="date" name="date_of_birth" id="date_of_birth" value="{{ profile.date_of_birth|date:'Y-m-d' }}" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile_picture" data-en="Profile Picture" data-ar="{% trans 'صورة الملف الشخصي' %}">{% trans "صورة الملف الشخصي" %}</label>
+                                <input type="url" name="profile_picture" id="profile_picture" value="{{ profile.profile_picture|default_if_none:'' }}" class="form-input">
+                                {% if profile.profile_picture %}
+                                    <br><img src="{{ profile.profile_picture }}" alt="Profile Picture" class="profile-img">
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="wallet_number" data-en="Wallet Number" data-ar="{% trans 'رقم المحفظة' %}">{% trans "رقم المحفظة" %}</label>
+                                <input type="text" name="wallet_number" id="wallet_number" value="{{ profile.wallet_number|default_if_none:'' }}" class="form-input">
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn-primary" data-en="Save Changes" data-ar="{% trans 'حفظ التعديلات' %}">{% trans "حفظ التعديلات" %}</button>
+                        <a href="{% url 'dashboard:search_marketer' %}" class="btn-primary btn-secondary" data-en="Cancel" data-ar="{% trans 'إلغاء' %}">{% trans "إلغاء" %}</a>
+                    </div>
+                </form>
+                <form method="post" action="{% url 'dashboard:delete_marketer' marketer.username %}" class="form-inline" onsubmit="return confirmDelete('{% trans 'هل أنت متأكد من حذف هذا المسوق؟ سيتم حذف جميع البيانات المرتبطة!' %}');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-primary btn-danger" data-en="Delete Marketer" data-ar="{% trans 'حذف المسوق' %}">{% trans "حذف المسوق" %}</button>
+                </form>
+            </div>
+            <div class="section">
+                <h3 data-en="Order Statistics" data-ar="{% trans 'إحصائيات الطلبات' %}">{% trans "إحصائيات الطلبات" %}</h3>
+                <ul>
+                    <li data-en="Pending: {{ stats.pending }}" data-ar="{% trans 'قيد الانتظار' %}: {{ stats.pending }}">{% trans "قيد الانتظار" %}: {{ stats.pending }}</li>
+                    <li data-en="Shipped: {{ stats.shipped }}" data-ar="{% trans 'تم الشحن' %}: {{ stats.shipped }}">{% trans "تم الشحن" %}: {{ stats.shipped }}</li>
+                    <li data-en="Completed: {{ stats.completed }}" data-ar="{% trans 'مكتمل' %}: {{ stats.completed }}">{% trans "مكتمل" %}: {{ stats.completed }}</li>
+                    <li data-en="Cancelled: {{ stats.cancelled }}" data-ar="{% trans 'ملغي' %}: {{ stats.cancelled }}">{% trans "ملغي" %}: {{ stats.cancelled }}</li>
+                    <li data-en="Total Orders: {{ stats.total_orders }}" data-ar="{% trans 'إجمالي الطلبات' %}: {{ stats.total_orders }}">{% trans "إجمالي الطلبات" %}: {{ stats.total_orders }}</li>
+                    <li data-en="Total Bonuses: {{ total_bonuses|floatformat:2 }} EGP" data-ar="{% trans 'إجمالي المكافآت' %}: {{ total_bonuses|floatformat:2 }} {% trans 'جنيه' %}">{% trans "إجمالي المكافآت" %}: {{ total_bonuses|floatformat:2 }} {% trans "جنيه" %}</li>
+                    <li data-en="Total Withdrawals: {{ total_withdrawals|floatformat:2 }} EGP" data-ar="{% trans 'إجمالي السحوبات' %}: {{ total_withdrawals|floatformat:2 }} {% trans 'جنيه' %}">{% trans "إجمالي السحوبات" %}: {{ total_withdrawals|floatformat:2 }} {% trans "جنيه" %}</li>
+                    <li data-en="Remaining Balance: {{ remaining_balance|floatformat:2 }} EGP" data-ar="{% trans 'الرصيد المتبقي' %}: {{ remaining_balance|floatformat:2 }} {% trans 'جنيه' %}">{% trans "الرصيد المتبقي" %}: {{ remaining_balance|floatformat:2 }} {% trans "جنيه" %}</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h3 data-en="Orders" data-ar="{% trans 'الطلبات' %}">{% trans "الطلبات" %}</h3>
+                {% if orders %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-en="Order ID" data-ar="{% trans 'رقم الطلب' %}">{% trans "رقم الطلب" %}</th>
+                                <th data-en="Status" data-ar="{% trans 'الحالة' %}">{% trans "الحالة" %}</th>
+                                <th data-en="Total Price" data-ar="{% trans 'السعر الإجمالي' %}">{% trans "السعر الإجمالي" %}</th>
+                                <th data-en="Created At" data-ar="{% trans 'تاريخ الإنشاء' %}">{% trans "تاريخ الإنشاء" %}</th>
+                                <th data-en="Marketer Commission" data-ar="{% trans 'عمولة المسوق' %}">{% trans "عمولة المسوق" %}</th>
+                                <th data-en="Actions" data-ar="{% trans 'إجراءات' %}">{% trans "إجراءات" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>{{ order.order.id }}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'dashboard:update_order_item' order.id %}" class="form-inline">
+                                            {% csrf_token %}
+                                            <select name="status" class="form-input">
+                                                <option value="pending" {% if order.order.status == 'pending' %}selected{% endif %} data-en="Pending" data-ar="{% trans 'قيد الانتظار' %}">{% trans "قيد الانتظار" %}</option>
+                                                <option value="shipped" {% if order.order.status == 'shipped' %}selected{% endif %} data-en="Shipped" data-ar="{% trans 'تم الشحن' %}">{% trans "تم الشحن" %}</option>
+                                                <option value="completed" {% if order.order.status == 'completed' %}selected{% endif %} data-en="Completed" data-ar="{% trans 'مكتمل' %}">{% trans "مكتمل" %}</option>
+                                                <option value="cancelled" {% if order.order.status == 'cancelled' %}selected{% endif %} data-en="Cancelled" data-ar="{% trans 'ملغي' %}">{% trans "ملغي" %}</option>
+                                            </select>
+                                            <button type="submit" class="btn-primary" data-en="Update" data-ar="{% trans 'تحديث' %}">{% trans "تحديث" %}</button>
+                                        </form>
+                                    </td>
+                                    <td>{{ order.order.total_price|floatformat:2 }} {% trans "جنيه" %}</td>
+                                    <td>{{ order.order.created_at|date:"Y-m-d H:i" }}</td>
+                                    <td>{{ order.marketer_commission|floatformat:2 }} {% trans "جنيه" %}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'dashboard:delete_order_item' order.id %}" class="form-inline" onsubmit="return confirmDelete('{% trans 'هل أنت متأكد من حذف هذا الطلب؟' %}');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn-primary btn-danger" data-en="Delete" data-ar="{% trans 'حذف' %}">{% trans "حذف" %}</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if orders.has_other_pages %}
+                        <div class="pagination">
+                            {% if orders.has_previous %}
+                                <a href="?page={{ orders.previous_page_number }}&period={{ period }}" class="btn-primary" data-en="Previous" data-ar="{% trans 'السابق' %}">{% trans "السابق" %} &laquo;</a>
+                            {% endif %}
+                            {% for num in orders.paginator.page_range %}
+                                {% if orders.number == num %}
+                                    <span>{{ num }}</span>
+                                {% else %}
+                                    <a href="?page={{ num }}&period={{ period }}" class="btn-primary">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            {% if orders.has_next %}
+                                <a href="?page={{ orders.next_page_number }}&period={{ period }}" class="btn-primary" data-en="Next" data-ar="{% trans 'التالي' %}">{% trans "التالي" %} &raquo;</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p data-en="No orders available" data-ar="{% trans 'لا توجد طلبات' %}">{% trans "لا توجد طلبات" %}</p>
+                {% endif %}
+            </div>
+            <div class="section">
+                <h3 data-en="Withdrawal Requests" data-ar="{% trans 'طلبات السحب' %}">{% trans "طلبات السحب" %}</h3>
+                {% if withdrawals %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-en="Request ID" data-ar="{% trans 'رقم الطلب' %}">{% trans "رقم الطلب" %}</th>
+                                <th data-en="Amount" data-ar="{% trans 'المبلغ' %}">{% trans "المبلغ" %}</th>
+                                <th data-en="Status" data-ar="{% trans 'الحالة' %}">{% trans "الحالة" %}</th>
+                                <th data-en="Created At" data-ar="{% trans 'تاريخ الإنشاء' %}">{% trans "تاريخ الإنشاء" %}</th>
+                                <th data-en="Address" data-ar="{% trans 'العنوان' %}">{% trans "العنوان" %}</th>
+                                <th data-en="Phone Number" data-ar="{% trans 'رقم الهاتف' %}">{% trans "رقم الهاتف" %}</th>
+                                <th data-en="Wallet Number" data-ar="{% trans 'رقم المحفظة' %}">{% trans "رقم المحفظة" %}</th>
+                                <th data-en="Actions" data-ar="{% trans 'إجراءات' %}">{% trans "إجراءات" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for withdrawal in withdrawals %}
+                                <tr>
+                                    <td>{{ withdrawal.id }}</td>
+                                    <td>{{ withdrawal.amount|floatformat:2 }} {% trans "جنيه" %}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'dashboard:update_withdrawal' withdrawal.id %}" class="form-inline">
+                                            {% csrf_token %}
+                                            <select name="status" class="form-input">
+                                                <option value="pending" {% if withdrawal.status == 'pending' %}selected{% endif %} data-en="Pending" data-ar="{% trans 'قيد المراجعة' %}">{% trans "قيد المراجعة" %}</option>
+                                                <option value="approved" {% if withdrawal.status == 'approved' %}selected{% endif %} data-en="Approved" data-ar="{% trans 'تمت الموافقة' %}">{% trans "تمت الموافقة" %}</option>
+                                                <option value="failed" {% if withdrawal.status == 'failed' %}selected{% endif %} data-en="Failed" data-ar="{% trans 'فشل' %}">{% trans "فشل" %}</option>
+                                            </select>
+                                            <button type="submit" class="btn-primary" data-en="Update" data-ar="{% trans 'تحديث' %}">{% trans "تحديث" %}</button>
+                                        </form>
+                                    </td>
+                                    <td>{{ withdrawal.created_at|date:"Y-m-d H:i" }}</td>
+                                    <td>{{ withdrawal.address }}</td>
+                                    <td>{{ withdrawal.phone_number }}</td>
+                                    <td>{{ withdrawal.wallet_number }}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'dashboard:delete_withdrawal' withdrawal.id %}" class="form-inline" onsubmit="return confirmDelete('{% trans 'هل أنت متأكد من حذف طلب السحب؟' %}');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn-primary btn-danger" data-en="Delete" data-ar="{% trans 'حذف' %}">{% trans "حذف" %}</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p data-en="No withdrawal requests available" data-ar="{% trans 'لا توجد طلبات سحب' %}">{% trans "لا توجد طلبات سحب" %}</p>
+                {% endif %}
+            </div>
+            <div class="section">
+                <h3 data-en="Bonus Requests" data-ar="{% trans 'طلبات المكافآت' %}">{% trans "طلبات المكافآت" %}</h3>
+                {% if bonuses %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-en="Request ID" data-ar="{% trans 'رقم الطلب' %}">{% trans "رقم الطلب" %}</th>
+                                <th data-en="Amount" data-ar="{% trans 'المبلغ' %}">{% trans "المبلغ" %}</th>
+                                <th data-en="Status" data-ar="{% trans 'الحالة' %}">{% trans "الحالة" %}</th>
+                                <th data-en="Completed Orders" data-ar="{% trans 'عدد الطلبات المكتملة' %}">{% trans "عدد الطلبات المكتملة" %}</th>
+                                <th data-en="Created At" data-ar="{% trans 'تاريخ الإنشاء' %}">{% trans "تاريخ الإنشاء" %}</th>
+                                <th data-en="Actions" data-ar="{% trans 'إجراءات' %}">{% trans "إجراءات" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bonus in bonuses %}
+                                <tr>
+                                    <td>{{ bonus.id }}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'dashboard:update_bonus' bonus.id %}" class="form-inline">
+                                            {% csrf_token %}
+                                            <input type="number" step="0.01" name="bonus_amount" value="{{ bonus.amount|floatformat:2|default_if_none:'' }}" class="form-input" {% if bonus.status != 'pending' %}disabled{% endif %}>
+                                            <select name="status" class="form-input">
+                                                <option value="pending" {% if bonus.status == 'pending' %}selected{% endif %} data-en="Pending" data-ar="{% trans 'قيد المراجعة' %}">{% trans "قيد المراجعة" %}</option>
+                                                <option value="approved" {% if bonus.status == 'approved' %}selected{% endif %} data-en="Approved" data-ar="{% trans 'تمت الموافقة' %}">{% trans "تمت الموافقة" %}</option>
+                                                <option value="rejected" {% if bonus.status == 'rejected' %}selected{% endif %} data-en="Rejected" data-ar="{% trans 'مرفوض' %}">{% trans "مرفوض" %}</option>
+                                            </select>
+                                            <button type="submit" class="btn-primary" data-en="Update" data-ar="{% trans 'تحديث' %}">{% trans "تحديث" %}</button>
+                                        </form>
+                                    </td>
+                                    <td data-en="{{ bonus.get_status_display|title }}" data-ar="{{ bonus.get_status_display }}">{{ bonus.get_status_display }}</td>
+                                    <td>{{ bonus.completed_orders }}</td>
+                                    <td>{{ bonus.created_at|date:"Y-m-d H:i" }}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'dashboard:delete_bonus' bonus.id %}" class="form-inline" onsubmit="return confirmDelete('{% trans 'هل أنت متأكد من حذف طلب المكافأة؟' %}');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn-primary btn-danger" data-en="Delete" data-ar="{% trans 'حذف' %}">{% trans "حذف" %}</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p data-en="No bonus requests available" data-ar="{% trans 'لا توجد طلبات مكافآت' %}">{% trans "لا توجد طلبات مكافآت" %}</p>
+                {% endif %}
+            </div>
+            <a href="{% url 'dashboard:dashboard' %}" class="btn-primary" data-en="Back to Dashboard" data-ar="{% trans 'رجوع إلى لوحة التحكم' %}">{% trans "رجوع إلى لوحة التحكم" %}</a>
+        {% endif %}
+    </main>
+    <footer class="footer">
+        <p data-en="Trafico Created by Creativity Code © 2025" data-ar="{% trans 'ترافيكو من إنشاء شركة كريتيفيتي كود © 2025' %}">{% trans "ترافيكو من إنشاء شركة كريتيفيتي كود © 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">📘</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">📸</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">🎵</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">🐦</a>
+        </div>
+    </footer>
+    <script src="{% static 'js/search_marketer.js' %}?v={% now 'U' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-link');
+                
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

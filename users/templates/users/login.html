@@ -1,0 +1,53 @@
+{% extends "users/base.html" %}
+{% load i18n static %}
+
+{% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "تسجيل الدخول" %}</title>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+    <header class="fixed-header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+    </header>
+    <div class="container">
+        <div class="mode-toggle">
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">☀️</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+        <h2 data-en="Login">{% trans "تسجيل الدخول" %}</h2>
+        <form method="post" class="form-animated">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username" data-en="Username">{% trans "اسم المستخدم" %}</label>
+                <input type="text" name="username" id="username" class="form-input" required placeholder="{% trans 'اسم المستخدم' %}">
+            </div>
+            <div class="form-group">
+                <label for="password" data-en="Password">{% trans "كلمة المرور" %}</label>
+                <input type="password" name="password" id="password" class="form-input" required placeholder="{% trans 'كلمة المرور' %}">
+            </div>
+            <button type="submit" class="btn-primary animated-button" data-en="Login">{% trans "تسجيل الدخول" %}</button>
+        </form>
+        <p class="form-link" data-en="Don't have an account? <a href='{% url 'users:register' %}'>Register</a>">{% trans "ليس لديك حساب؟" %} <a href="{% url 'users:register' %}">{% trans "إنشاء حساب" %}</a></p>
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="form-error">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <footer class="footer">
+        <p>&copy; 2025 Creativity Code. {% trans "جميع الحقوق محفوظة" %}</p>
+    </footer>
+    <script src="{% static 'js/login.js' %}?v={% now 'U' %}"></script>
+{% endblock %}

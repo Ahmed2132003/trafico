@@ -1,0 +1,174 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "تواصل معنا - ترافيكو" %}</title>
+    <meta name="description" content="{% trans 'تواصل مع فريق ترافيكو للاستفسارات أو الدعم. نحن هنا لمساعدتك في تجربة التسوق والتسويق!' %}">
+    <meta name="keywords" content="{% trans 'ترافيكو, تواصل معنا, دعم, استفسارات, تسويق بالعمولة, تصميم ملابس' %}">
+    <link rel="canonical" href="{% url 'dashboard:contact_us' %}">
+    <meta property="og:title" content="{% trans 'تواصل معنا - ترافيكو' %}">
+    <meta property="og:description" content="{% trans 'هل لديك استفسار؟ تواصل مع فريق ترافيكو اليوم للحصول على الدعم.' %}">
+    <meta property="og:image" content="https://i.postimg.cc/L8kptrd7/contact-us.jpg">
+    <meta property="og:url" content="{% url 'dashboard:contact_us' %}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'تواصل معنا - ترافيكو' %}">
+    <meta name="twitter:description" content="{% trans 'فريق ترافيكو جاهز للرد على استفساراتك ودعمك في رحلتك.' %}">
+    <meta name="twitter:image" content="https://i.postimg.cc/L8kptrd7/contact-us.jpg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://trafico.com/#organization",
+                "name": "Trafico",
+                "url": "https://trafico.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.postimg.cc/FzSYsKp6/logo-1.jpg"
+                },
+                "sameAs": [
+                    "https://www.facebook.com/share/1ENADaTtSn/",
+                    "https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==",
+                    "https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1",
+                    "https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09"
+                ]
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://trafico.com/contact/#webpage",
+                "url": "{% url 'dashboard:contact_us' %}",
+                "name": "{% trans 'تواصل معنا - ترافيكو' %}",
+                "description": "{% trans 'تواصل مع فريق ترافيكو للحصول على الدعم أو للاستفسار عن خدماتنا.' %}",
+                "breadcrumb": {
+                    "@id": "https://trafico.com/contact/#breadcrumb"
+                },
+                "inLanguage": "{{ LANGUAGE_CODE }}"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://trafico.com/contact/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trafico",
+                        "item": "https://trafico.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{% trans 'تواصل معنا' %}",
+                        "item": "{% url 'dashboard:contact_us' %}"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/contact_us.css' %}?v={% now 'U' %}">
+</head>
+<body class="{% if request.session.theme %}{{ request.session.theme }}{% else %}light-mode{% endif %}">
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+        <button class="hamburger" aria-label="Toggle Menu">☰</button>
+        <div class="nav-links">
+            <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
+            <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
+            <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
+            <a href="{% url 'products:cart' %}" class="nav-link icon" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">🛒</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users:logout' %}" class="nav-link" data-en="Logout" data-ar="{% trans 'تسجيل الخروج' %}">{% trans "تسجيل الخروج" %}</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link" data-en="Login" data-ar="{% trans 'تسجيل الدخول' %}">{% trans "تسجيل الدخول" %}</a>
+            {% endif %}
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-title-en="Toggle Dark Mode" data-title-ar="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-title-en="Toggle Language" data-title-ar="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 data-en="Contact Trafico" data-ar="{% trans 'تواصل مع ترافيكو' %}">{% trans "تواصل مع ترافيكو" %}</h1>
+            <p data-en="Have a question or need support? Our team is ready to help!" data-ar="{% trans 'هل لديك استفسار أو تحتاج إلى دعم؟ فريقنا جاهز لمساعدتك!' %}">{% trans "هل لديك استفسار أو تحتاج إلى دعم؟ فريقنا جاهز لمساعدتك!" %}</p>
+        </div>
+    </div>
+    <main class="container">
+        
+        <section>
+            <h2 data-en="Get in Touch Today" data-ar="{% trans 'راسلنا اليوم' %}">{% trans "راسلنا اليوم" %}</h2>
+            <p data-en="Fill out the form below, and our team will get back to you as soon as possible. Whether you're a customer, marketer, or designer, we're here to support you." data-ar="{% trans 'املأ النموذج التالي وسيتواصل معك فريقنا في أقرب وقت. سواء كنت عميلًا، مسوقًا، أو مصممًا، نحن هنا لدعمك.' %}">{% trans "املأ النموذج التالي وسيتواصل معك فريقنا في أقرب وقت. سواء كنت عميلًا، مسوقًا، أو مصممًا، نحن هنا لدعمك." %}</p>
+            <form class="contact-form" method="post" action="{% url 'dashboard:contact_us' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name" data-en="Name" data-ar="{% trans 'الاسم' %}">{% trans "الاسم" %}</label>
+                    <input type="text" id="name" name="name" class="form-input" required placeholder="{% trans 'أدخل اسمك' %}">
+                </div>
+                <div class="form-group">
+                    <label for="email" data-en="Email" data-ar="{% trans 'البريد الإلكتروني' %}">{% trans "البريد الإلكتروني" %}</label>
+                    <input type="email" id="email" name="email" class="form-input" required placeholder="{% trans 'أدخل بريدك الإلكتروني' %}">
+                </div>
+                <div class="form-group">
+                    <label for="message" data-en="Message" data-ar="{% trans 'الرسالة' %}">{% trans "الرسالة" %}</label>
+                    <textarea id="message" name="message" class="form-input" required placeholder="{% trans 'اكتب رسالتك هنا' %}"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" data-en="Send" data-ar="{% trans 'إرسال' %}">{% trans "إرسال" %}</button>
+            </form>
+            {% if messages %}
+                <div class="form-messages">
+                    {% for message in messages %}
+                        <div class="form-error notification {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+    </main>
+    <footer class="footer">
+        <p data-en="Trafico Created by Creativity Code © 2025" data-ar="{% trans 'ترافيكو من إنشاء شركة كريتيفيتي كود © 2025' %}">{% trans "ترافيكو من إنشاء شركة كريتيفيتي كود © 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">📘</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">📸</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">🎵</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">🐦</a>
+        </div>
+    </footer>
+    <script src="{% static 'js/contact_us.js' %}?v={% now 'U' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-link');
+                
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

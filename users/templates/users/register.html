@@ -1,0 +1,74 @@
+{% load i18n static %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "إنشاء حساب" %}</title>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+<body class="light-mode">
+    <header class="fixed-header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+    </header>
+    <div class="container">
+        <div class="mode-toggle">
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">☀️</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+        <h2 data-en="Create an Account">{% trans "إنشاء حساب" %}</h2>
+        <form method="post" class="form-animated">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" data-en="{{ field.label|title }}">{{ field.label }}</label>
+                    {% if field.name == 'user_type' %}
+                        <div class="form-check-group">
+                            {% for value, label in field.field.choices %}
+                                <div class="form-check">
+                                    <input type="radio" name="{{ field.name }}" id="{{ field.id_for_label }}_{{ value }}" value="{{ value }}" class="form-check-input" {% if field.value == value %}checked{% endif %} {% if field.field.required %}required{% endif %}>
+                                    <label class="form-check-label" for="{{ field.id_for_label }}_{{ value }}" data-en="{% if value == 'marketer' %}Marketer{% elif value == 'designer' %}Designer{% else %}Customer{% endif %}">{{ label }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <input type="{{ field.field.widget.input_type|default:'text' }}"
+                               name="{{ field.name }}"
+                               id="{{ field.id_for_label }}"
+                               class="form-input"
+                               value="{{ field.value|default_if_none:'' }}"
+                               {% if field.field.required %}required{% endif %}
+                               placeholder="{% trans field.label %}">
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="form-error">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn-primary animated-button" data-en="Register">{% trans "تسجيل" %}</button>
+        </form>
+        <p class="form-link" data-en="Already have an account? <a href='{% url 'users:login' %}'>Login</a>">{% trans "لديك حساب بالفعل؟" %} <a href="{% url 'users:login' %}">{% trans "تسجيل الدخول" %}</a></p>
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="form-error">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <footer class="footer">
+        <p>&copy; 2025 Creativity Code. {% trans "جميع الحقوق محفوظة" %}</p>
+    </footer>
+    <script src="{% static 'js/register.js' %}?v={% now 'U' %}"></script>
+</body>
+</html>

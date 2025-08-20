@@ -1,0 +1,258 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "تفاصيل المنتج" %} - {{ product.name }}</title>
+    <meta name="description" content="{% trans 'اكتشف تفاصيل المنتج' %} {{ product.name }} {% trans 'من ترافيكو، مع خيارات الألوان والمقاسات وفرص التسويق بالعمولة.' %}">
+    <meta name="keywords" content="{% trans 'منتج, تسوق, ترافيكو, تفاصيل المنتج, ألوان, مقاسات, تسويق بالعمولة' %}">
+    <link rel="canonical" href="{% url 'products:product_detail' product.id %}">
+    <meta property="og:title" content="{% trans 'تفاصيل المنتج' %} - {{ product.name }}">
+    <meta property="og:description" content="{% trans 'تصفح تفاصيل المنتج' %} {{ product.name }} {% trans 'واختر الألوان والمقاسات المناسبة مع ترافيكو.' %}">
+    <meta property="og:image" content="{{ product.image|default:'https://i.postimg.cc/vZ5QP4n0/proudcts.jpg' }}">
+    <meta property="og:url" content="{% url 'products:product_detail' product.id %}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'تفاصيل المنتج' %} - {{ product.name }}">
+    <meta name="twitter:description" content="{% trans 'تصفح تفاصيل المنتج' %} {{ product.name }} {% trans 'واختر الألوان والمقاسات المناسبة مع ترافيكو.' %}">
+    <meta name="twitter:image" content="{{ product.image|default:'https://i.postimg.cc/vZ5QP4n0/proudcts.jpg' }}">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://trafico.com/#organization",
+                "name": "Trafico",
+                "url": "https://trafico.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.postimg.cc/FzSYsKp6/logo-1.jpg"
+                },
+                "sameAs": [
+                    "https://www.facebook.com/share/1ENADaTtSn/",
+                    "https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==",
+                    "https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1",
+                    "https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09"
+                ]
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://trafico.com/products/{{ product.id }}/#webpage",
+                "url": "{% url 'products:product_detail' product.id %}",
+                "name": "{% trans 'تفاصيل المنتج' %} - {{ product.name }}",
+                "description": "{% trans 'تصفح تفاصيل المنتج' %} {{ product.name }} {% trans 'واختر الألوان والمقاسات المناسبة مع ترافيكو.' %}",
+                "breadcrumb": {
+                    "@id": "https://trafico.com/products/{{ product.id }}/#breadcrumb"
+                },
+                "inLanguage": "{{ LANGUAGE_CODE }}"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://trafico.com/products/{{ product.id }}/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trafico",
+                        "item": "https://trafico.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{% trans 'المنتجات' %}",
+                        "item": "{% url 'products:product_list' %}"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "{{ product.name }}",
+                        "item": "{% url 'products:product_detail' product.id %}"
+                    }
+                ]
+            },
+            {
+                "@type": "Product",
+                "@id": "https://trafico.com/products/{{ product.id }}/#product",
+                "name": "{{ product.name }}",
+                "image": "{{ product.image|default:'https://i.postimg.cc/vZ5QP4n0/proudcts.jpg' }}",
+                "description": "{{ product.description }}",
+                "offers": {
+                    "@type": "Offer",
+                    "priceCurrency": "EGP",
+                    "price": "{{ display_price|floatformat:2 }}",
+                    "availability": "{{ availability }}"
+                }
+            }
+        ]
+    }
+    </script>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/product_detail.css' %}?v={% now 'U' %}">
+</head>
+<body class="{% if request.session.theme %}{{ request.session.theme }}{% else %}light-mode{% endif %}">
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+        <button class="hamburger" aria-label="Toggle Menu">☰</button>
+        <div class="nav-links">
+            <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
+            <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
+            <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
+            <a href="{% url 'products:cart' %}" class="nav-link" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">{% trans "عربة التسوق" %}</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users:logout' %}" class="nav-link" data-en="Logout" data-ar="{% trans 'تسجيل الخروج' %}">{% trans "تسجيل الخروج" %}</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link" data-en="Login" data-ar="{% trans 'تسجيل الدخول' %}">{% trans "تسجيل الدخول" %}</a>
+            {% endif %}
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-title-en="Toggle Dark Mode" data-title-ar="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-title-en="Toggle Language" data-title-ar="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 data-en="Product Details" data-ar="{% trans 'تفاصيل المنتج' %}">{% trans "تفاصيل المنتج" %}</h1>
+            <p data-en="{{ product.name }}" data-ar="{{ product.name }}">{{ product.name }}</p>
+        </div>
+    </div>
+    <main class="container">
+        <div class="product-detail">
+            <div class="product-images">
+                {% if product.images %}
+                    {% for image in product.images %}
+                        <img src="{{ image|default:'https://via.placeholder.com/300' }}" alt="{{ product.name }}" class="product-image-detail">
+                    {% endfor %}
+                {% else %}
+                    <img src="{{ product.image|default:'https://via.placeholder.com/300' }}" alt="{{ product.name }}" class="product-image-detail" data-en="{{ product.name }}" data-ar="{{ product.name }}">
+                {% endif %}
+            </div>
+            <h3 data-en="{{ product.name }}" data-ar="{{ product.name }}">{{ product.name }}</h3>
+            <p data-en="{{ product.description }}" data-ar="{{ product.description }}">{{ product.description }}</p>
+            <p data-en="Price: {{ display_price|floatformat:2 }} EGP" data-ar="{% trans 'السعر' %}: {{ display_price|floatformat:2 }} {% trans 'جنيه' %}">{% trans "السعر" %}: {{ display_price|floatformat:2 }} {% trans "جنيه" %}</p>
+            <p data-en="Stock: {{ product.stock }}" data-ar="{% trans 'المخزون' %}: {{ product.stock }}">{% trans "المخزون" %}: {{ product.stock }}</p>
+            <div class="product-options">
+                <h4 data-en="Available Colors" data-ar="{% trans 'الألوان المتاحة' %}">{% trans "الألوان المتاحة" %}</h4>
+                {% for color in product.colors.all %}
+                    <p class="stock-status {% if color.stock > 0 %}available{% else %}unavailable{% endif %}" data-en="{{ color.color }}: {% if color.stock > 0 %}Available ({{ color.stock }} pieces){% else %}Unavailable{% endif %}" data-ar="{{ color.color }}: {% if color.stock > 0 %}{% trans 'متوفر' %} ({{ color.stock }} {% trans 'قطعة' %}){% else %}{% trans 'غير متوفر' %}{% endif %}">
+                        {{ color.color }}: {% if color.stock > 0 %}{% trans "متوفر" %} ({{ color.stock }} {% trans "قطعة" %}){% else %}{% trans "غير متوفر" %}{% endif %}
+                    </p>
+                {% empty %}
+                    <p data-en="No colors available" data-ar="{% trans 'لا توجد ألوان متاحة' %}">{% trans "لا توجد ألوان متاحة" %}</p>
+                {% endfor %}
+            </div>
+            <div class="product-options">
+                <h4 data-en="Available Sizes" data-ar="{% trans 'المقاسات المتاحة' %}">{% trans "المقاسات المتاحة" %}</h4>
+                {% for size in product.sizes.all %}
+                    <p class="stock-status {% if size.stock > 0 %}available{% else %}unavailable{% endif %}" data-en="{{ size.size }}: {% if size.stock > 0 %}Available ({{ size.stock }} pieces){% else %}Unavailable{% endif %}" data-ar="{{ size.size }}: {% if size.stock > 0 %}{% trans 'متوفر' %} ({{ size.stock }} {% trans 'قطعة' %}){% else %}{% trans 'غير متوفر' %}{% endif %}">
+                        {{ size.size }}: {% if size.stock > 0 %}{% trans "متوفر" %} ({{ size.stock }} {% trans "قطعة" %}){% else %}{% trans "غير متوفر" %}{% endif %}
+                    </p>
+                {% empty %}
+                    <p data-en="No sizes available" data-ar="{% trans 'لا توجد مقاسات متاحة' %}">{% trans "لا توجد مقاسات متاحة" %}</p>
+                {% endfor %}
+            </div>
+            {% if user.is_authenticated %}
+                <div class="product-options">
+                    <form action="{% url 'products:add_to_cart' product.id %}" method="post" class="form-animated">
+                        {% csrf_token %}
+                        <label for="color" data-en="Select Color" data-ar="{% trans 'اختر اللون' %}">{% trans "اختر اللون" %}</label>
+                        <select name="color" required>
+                            <option value="" data-en="Choose a color" data-ar="{% trans 'اختر لونًا' %}">{% trans "اختر لونًا" %}</option>
+                            {% for color in product.colors.all %}
+                                {% if color.stock > 0 %}
+                                    <option value="{{ color.color }}">{{ color.color }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <label for="size" data-en="Select Size" data-ar="{% trans 'اختر المقاس' %}">{% trans "اختر المقاس" %}</label>
+                        <select name="size" required>
+                            <option value="" data-en="Choose a size" data-ar="{% trans 'اختر مقاسًا' %}">{% trans "اختر مقاسًا" %}</option>
+                            {% for size in product.sizes.all %}
+                                {% if size.stock > 0 %}
+                                    <option value="{{ size.size }}">{{ size.size }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <label for="quantity" data-en="Quantity" data-ar="{% trans 'الكمية' %}">{% trans "الكمية" %}</label>
+                        <input type="number" name="quantity" value="1" min="1" required class="form-input">
+                        {% if user.user_type == 'marketer' %}
+                            <label for="marketer_commission" data-en="Marketer Commission" data-ar="{% trans 'عمولة المسوق' %}">{% trans "عمولة المسوق" %}</label>
+                            <input type="number" name="marketer_commission" value="0.00" step="0.01" class="form-input">
+                        {% endif %}
+                        <button type="submit" class="btn-primary animated-button" data-en="Add to Cart" data-ar="{% trans 'إضافة إلى العربة' %}">{% trans "إضافة إلى العربة" %}</button>
+                    </form>
+                </div>
+            {% endif %}
+            <div class="button-group">
+                {% if user.is_authenticated %}
+                    <form action="{% url 'products:add_to_favorites' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-primary" data-en="{% if product.id in favorites %}Remove from Favorites{% else %}Add to Favorites{% endif %}" data-ar="{% if product.id in favorites %}{% trans 'إزالة من المفضلة' %}{% else %}{% trans 'إضافة إلى المفضلة' %}{% endif %}">
+                            {% if product.id in favorites %}
+                                {% trans "إزالة من المفضلة" %}
+                            {% else %}
+                                {% trans "إضافة إلى المفضلة" %}
+                            {% endif %}
+                        </button>
+                    </form>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'products:product_edit' product.id %}" class="btn-primary" data-en="Edit" data-ar="{% trans 'تعديل' %}">{% trans "تعديل" %}</a>
+                        <a href="{% url 'products:product_delete' product.id %}" class="btn-primary" data-en="Delete" data-ar="{% trans 'حذف' %}">{% trans "حذف" %}</a>
+                    {% endif %}
+                {% endif %}
+                <a href="{% url 'products:product_list' %}" class="btn-primary" data-en="Back to Products" data-ar="{% trans 'رجوع إلى المنتجات' %}">{% trans "رجوع إلى المنتجات" %}</a>
+            </div>
+        </div>
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="form-error notification error">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+    <footer class="footer">
+        <p data-en="Trafico Created by Creativity Code © 2025" data-ar="{% trans 'ترافيكو من إنشاء شركة كريتيفيتي كود © 2025' %}">{% trans "ترافيكو من إنشاء شركة كريتيفيتي كود © 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">📘</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">📸</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">🎵</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">🐦</a>
+        </div>
+    </footer>
+    <script src="{% static 'js/product_detail.js' %}?v={% now 'U' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-link');
+            
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% load i18n %}
+<header class="fixed-header">
+    <div class="logo-container">
+        <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+    </div>
+    <div class="mode-toggle">
+        <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-en="Toggle Dark Mode">
+            <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+        </button>
+        <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-en="Toggle Language">
+            <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+        </button>
+    </div>
+</header>

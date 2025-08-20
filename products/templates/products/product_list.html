@@ -1,0 +1,191 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "المنتجات - ترافيكو" %}</title>
+    <meta name="description" content="{% trans 'تسوق أفضل المنتجات من ترافيكو، واكتشف تصاميم فريدة من مصممين موهوبين مع فرص تسويق بالعمولة.' %}">
+    <meta name="keywords" content="{% trans 'منتجات, تسوق, ترافيكو, تسويق بالعمولة, تصاميم ملابس, مصممين, مسوقين' %}">
+    <link rel="canonical" href="{% url 'products:product_list' %}">
+    <meta property="og:title" content="{% trans 'المنتجات - ترافيكو' %}">
+    <meta property="og:description" content="{% trans 'استمتع بتجربة تسوق مميزة مع منتجات ترافيكو المصممة بعناية، وانضم إلى شبكة المسوقين والمصممين.' %}">
+    <meta property="og:image" content="https://i.postimg.cc/vZ5QP4n0/proudcts.jpg">
+    <meta property="og:url" content="{% url 'products:product_list' %}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'المنتجات - ترافيكو' %}">
+    <meta name="twitter:description" content="{% trans 'تسوق منتجات مميزة وشارك في التسويق بالعمولة مع ترافيكو.' %}">
+    <meta name="twitter:image" content="https://i.postimg.cc/vZ5QP4n0/proudcts.jpg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://trafico.com/#organization",
+                "name": "Trafico",
+                "url": "https://trafico.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.postimg.cc/FzSYsKp6/logo-1.jpg"
+                },
+                "sameAs": [
+                    "https://www.facebook.com/share/1ENADaTtSn/",
+                    "https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==",
+                    "https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1",
+                    "https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09"
+                ]
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://trafico.com/products/#webpage",
+                "url": "{% url 'products:product_list' %}",
+                "name": "{% trans 'المنتجات - ترافيكو' %}",
+                "description": "{% trans 'تصفح مجموعة متنوعة من المنتجات المصممة بعناية، وانضم إلى مجتمع المسوقين والمصممين في ترافيكو.' %}",
+                "breadcrumb": {
+                    "@id": "https://trafico.com/products/#breadcrumb"
+                },
+                "inLanguage": "{{ LANGUAGE_CODE }}"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://trafico.com/products/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trafico",
+                        "item": "https://trafico.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{% trans 'المنتجات' %}",
+                        "item": "{% url 'products:product_list' %}"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/product_list.css' %}?v={% now 'U' %}">
+</head>
+<body>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+        <button class="hamburger" aria-label="Toggle Menu">☰</button>
+        <div class="nav-links">
+            <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
+            <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
+            <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
+            <a href="{% url 'products:cart' %}" class="nav-link icon" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">🛒</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users:logout' %}" class="nav-link" data-en="Logout" data-ar="{% trans 'تسجيل الخروج' %}">{% trans "تسجيل الخروج" %}</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link" data-en="Login" data-ar="{% trans 'تسجيل الدخول' %}">{% trans "تسجيل الدخول" %}</a>
+            {% endif %}
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-title-en="Toggle Dark Mode" data-title-ar="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-title-en="Toggle Language" data-title-ar="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+    </header>
+    <section class="hero" style="background-image: url('https://i.postimg.cc/vZ5QP4n0/proudcts.jpg');">
+        <div class="hero-content">
+            <h1>{% trans "تسوق منتجات ترافيكو المميزة" %}</h1>
+            <p>{% trans "اكتشف تشكيلة فريدة من المنتجات المصممة بعناية، وانضم إلى مجتمع المسوقين والمصممين لتحقيق أرباحك!" %}</p>
+        </div>
+    </section>
+    <section class="container">
+        <h2>{% trans "المنتجات" %}</h2>
+        {% if user.is_superuser %}
+            <a href="{% url 'products:product_add' %}" class="btn-primary">{% trans "إضافة منتج" %}</a>
+        {% endif %}
+        <div class="product-grid">
+            {% for item in products_with_price %}
+                <div class="product-card">
+                    <img src="{{ item.product.image|default:'https://via.placeholder.com/150' }}" alt="{{ item.product.name }}" class="product-image">
+                    <h3>{{ item.product.name }}</h3>
+                    <p>{{ item.product.description|truncatechars:50 }}</p>
+                    <p class="price-text">{% trans "السعر" %}: {{ item.display_price|floatformat:2 }} {% trans "جنيه" %}</p>
+                    <p class="stock-text">{% trans "المخزون" %}: {{ item.product.stock }}</p>
+                    <div class="button-group">
+                        <a href="{% url 'products:product_detail' item.product.id %}" class="btn-primary">{% trans "عرض التفاصيل" %}</a>
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'products:add_to_favorites' item.product.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-primary favorite-btn">
+                                    {% if item.product.id in favorites %}
+                                        {% trans "إزالة من المفضلة" %}
+                                    {% else %}
+                                        {% trans "إضافة إلى المفضلة" %}
+                                    {% endif %}
+                                </button>
+                            </form>
+                            <a href="{% url 'products:add_to_cart' item.product.id %}" class="btn-primary">{% trans "إضافة إلى العربة" %}</a>
+                            {% if user.is_superuser %}
+                                <a href="{% url 'products:product_edit' item.product.id %}" class="btn-primary">{% trans "تعديل" %}</a>
+                                <a href="{% url 'products:product_delete' item.product.id %}" class="btn-primary">{% trans "حذف" %}</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="no-products">{% trans "لا توجد منتجات متاحة" %}</p>
+            {% endfor %}
+        </div>
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="form-error">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+    <footer class="footer">
+        <p>{% trans "جميع الحقوق محفوظة © ترافيكو مقدم من شركة كريتيفتي كود للبرمجة 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">FB</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">IG</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">TT</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">TW</a>
+        </div>
+    </footer>
+    <script src="{% static 'js/product_list.js' %}?v={% now 'U' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-link');
+            
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

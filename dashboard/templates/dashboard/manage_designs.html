@@ -1,0 +1,214 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "إدارة التصميمات - ترافيكو" %}</title>
+    <meta name="description" content="{% trans 'إدارة التصميمات في منصة ترافيكو، إضافة وتعديل وحذف التصميمات بسهولة.' %}">
+    <meta name="keywords" content="{% trans 'ترافيكو, إدارة التصميمات, التصميمات, إضافة تصميم, تعديل تصميم' %}">
+    <link rel="canonical" href="{% url 'dashboard:manage_designs' %}">
+    <meta property="og:title" content="{% trans 'إدارة التصميمات - ترافيكو' %}">
+    <meta property="og:description" content="{% trans 'تحكم في تصميماتك، أضف، عدّل، أو احذف التصميمات في منصة ترافيكو.' %}">
+    <meta property="og:image" content="https://i.postimg.cc/jdmxDHJQ/manage-designs.jpg">
+    <meta property="og:url" content="{% url 'dashboard:manage_designs' %}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'إدارة التصميمات - ترافيكو' %}">
+    <meta name="twitter:description" content="{% trans 'إدارة التصميمات بسهولة مع منصة ترافيكو.' %}">
+    <meta name="twitter:image" content="https://i.postimg.cc/jdmxDHJQ/manage-designs.jpg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://trafico.com/#organization",
+                "name": "Trafico",
+                "url": "https://trafico.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.postimg.cc/FzSYsKp6/logo-1.jpg"
+                },
+                "sameAs": [
+                    "https://www.facebook.com/share/1ENADaTtSn/",
+                    "https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==",
+                    "https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1",
+                    "https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09"
+                ]
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://trafico.com/manage-designs/#webpage",
+                "url": "{% url 'dashboard:manage_designs' %}",
+                "name": "{% trans 'إدارة التصميمات - ترافيكو' %}",
+                "description": "{% trans 'إدارة التصميمات في منصة ترافيكو، إضافة وتعديل وحذف التصميمات بسهولة.' %}",
+                "breadcrumb": {
+                    "@id": "https://trafico.com/manage-designs/#breadcrumb"
+                },
+                "inLanguage": "{{ LANGUAGE_CODE }}"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://trafico.com/manage-designs/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trafico",
+                        "item": "https://trafico.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{% trans 'إدارة التصميمات' %}",
+                        "item": "{% url 'dashboard:manage_designs' %}"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/manage_designs.css' %}?v={% now 'U' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="{% if request.session.theme %}{{ request.session.theme }}{% else %}light-mode{% endif %}">
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+        <button class="hamburger" aria-label="Toggle Menu">☰</button>
+        <div class="nav-links">
+            <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
+            <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
+            <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
+            <a href="{% url 'products:cart' %}" class="nav-link icon" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">🛒</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users:logout' %}" class="nav-link" data-en="Logout" data-ar="{% trans 'تسجيل الخروج' %}">{% trans "تسجيل الخروج" %}</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link" data-en="Login" data-ar="{% trans 'تسجيل الدخول' %}">{% trans "تسجيل الدخول" %}</a>
+            {% endif %}
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-title-en="Toggle Dark Mode" data-title-ar="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-title-en="Toggle Language" data-title-ar="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 data-en="Manage Designs" data-ar="{% trans 'إدارة التصميمات' %}">{% trans "إدارة التصميمات" %}</h1>
+            <p data-en="Add, edit, or delete designs with ease on the Trafico platform." data-ar="{% trans 'أضف، عدّل، أو احذف التصميمات بسهولة على منصة ترافيكو.' %}">{% trans "أضف، عدّل، أو احذف التصميمات بسهولة على منصة ترافيكو." %}</p>
+        </div>
+    </div>
+    <main class="container">
+
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="form-error notification {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="design_id" value="{{ design.id|default_if_none:'' }}">
+                <label for="pdf_url" data-en="PDF URL" data-ar="{% trans 'رابط PDF' %}">{% trans "رابط PDF" %}</label>
+                <input type="url" name="pdf_url" value="{{ design.pdf_url|default_if_none:'' }}" class="form-input" required>
+                <label for="commission_per_sale" data-en="Commission per Sale (EGP)" data-ar="{% trans 'العمولة لكل بيع (جنيه)' %}">{% trans "العمولة لكل بيع (جنيه)" %}</label>
+                <input type="number" step="0.01" name="commission_per_sale" value="{{ design.commission_per_sale|default_if_none:'0.00' }}" class="form-input" required>
+                <label for="status" data-en="Status" data-ar="{% trans 'الحالة' %}">{% trans "الحالة" %}</label>
+                <select name="status" class="form-input" required>
+                    <option value="pending" {% if design.status == 'pending' %}selected{% endif %} data-en="Pending" data-ar="{% trans 'قيد الانتظار' %}">{% trans "قيد الانتظار" %}</option>
+                    <option value="approved" {% if design.status == 'approved' %}selected{% endif %} data-en="Approved" data-ar="{% trans 'مقبول' %}">{% trans "مقبول" %}</option>
+                    <option value="rejected" {% if design.status == 'rejected' %}selected{% endif %} data-en="Rejected" data-ar="{% trans 'مرفوض' %}">{% trans "مرفوض" %}</option>
+                </select>
+                <label for="designer_id" data-en="Designer" data-ar="{% trans 'المصمم' %}">{% trans "المصمم" %}</label>
+                <select name="designer_id" class="form-input" required>
+                    <option value="" data-en="Select a designer" data-ar="{% trans 'اختر مصممًا' %}">{% trans "اختر مصممًا" %}</option>
+                    {% for designer in designers %}
+                        <option value="{{ designer.id }}" {% if design.designer.id == designer.id %}selected{% endif %}>{{ designer.username }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" name="save" class="btn-primary" data-en="Save Design" data-ar="{% trans 'حفظ التصميم' %}">{% trans "حفظ التصميم" %}</button>
+            </form>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-en="Design ID" data-ar="{% trans 'رقم التصميم' %}">{% trans "رقم التصميم" %}</th>
+                        <th data-en="Designer" data-ar="{% trans 'المصمم' %}">{% trans "المصمم" %}</th>
+                        <th data-en="PDF URL" data-ar="{% trans 'رابط PDF' %}">{% trans "رابط PDF" %}</th>
+                        <th data-en="Commission per Sale" data-ar="{% trans 'العمولة لكل بيع' %}">{% trans "العمولة لكل بيع" %}</th>
+                        <th data-en="Status" data-ar="{% trans 'الحالة' %}">{% trans "الحالة" %}</th>
+                        <th data-en="Created At" data-ar="{% trans 'تاريخ الإنشاء' %}">{% trans "تاريخ الإنشاء" %}</th>
+                        <th data-en="Actions" data-ar="{% trans 'الإجراءات' %}">{% trans "الإجراءات" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for design in designs %}
+                        <tr>
+                            <td>{{ design.id }}</td>
+                            <td>{{ design.designer.username }}</td>
+                            <td><a href="{{ design.pdf_url }}" target="_blank" class="btn-primary" data-en="View PDF" data-ar="{% trans 'عرض PDF' %}">{% trans "عرض PDF" %}</a></td>
+                            <td>{{ design.commission_per_sale|floatformat:2 }} {% trans "جنيه" %}</td>
+                            <td data-en="{{ design.get_status_display|title }}" data-ar="{{ design.get_status_display }}">{{ design.get_status_display }}</td>
+                            <td>{{ design.created_at|date:"Y-m-d H:i" }}</td>
+                            <td>
+                                <a href="{% url 'dashboard:manage_designs' %}?design_id={{ design.id }}" class="btn-primary edit-btn" data-en="Edit" data-ar="{% trans 'تعديل' %}">{% trans "تعديل" %}</a>
+                                <form method="post" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="design_id" value="{{ design.id }}">
+                                    <button type="submit" name="delete" class="btn-primary delete-btn" data-en="Delete" data-ar="{% trans 'حذف' %}">{% trans "حذف" %}</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <footer class="footer">
+        <p data-en="Trafico Created by Creativity Code © 2025" data-ar="{% trans 'ترافيكو من إنشاء شركة كريتيفيتي كود © 2025' %}">{% trans "ترافيكو من إنشاء شركة كريتيفيتي كود © 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">📘</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">📸</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">🎵</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">🐦</a>
+        </div>
+    </footer>
+    <script src="{% static 'js/manage_designs.js' %}?v={% now 'U' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-link');
+                
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

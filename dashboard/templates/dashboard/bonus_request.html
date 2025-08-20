@@ -1,0 +1,163 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "طلب مكافأة" %}</title>
+    <meta name="description" content="{% trans 'قم بطلب مكافأتك مع ترافيكو بناءً على الطلبات المكتملة.' %}">
+    <meta name="keywords" content="{% trans 'طلب مكافأة, ترافيكو, مكافأة, الطلبات المكتملة' %}">
+    <link rel="canonical" href="{% url 'dashboard:bonus_request' %}">
+    <meta property="og:title" content="{% trans 'طلب مكافأة - ترافيكو' %}">
+    <meta property="og:description" content="{% trans 'قم بطلب مكافأتك مع ترافيكو بناءً على الطلبات المكتملة.' %}">
+    <meta property="og:image" content="https://i.postimg.cc/Jh9TV5Gv/withdrawal.jpg">
+    <meta property="og:url" content="{% url 'dashboard:bonus_request' %}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'طلب مكافأة - ترافيكو' %}">
+    <meta name="twitter:description" content="{% trans 'قم بطلب مكافأتك مع ترافيكو بناءً على الطلبات المكتملة.' %}">
+    <meta name="twitter:image" content="https://i.postimg.cc/Jh9TV5Gv/withdrawal.jpg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://trafico.com/#organization",
+                "name": "Trafico",
+                "url": "https://trafico.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.postimg.cc/FzSYsKp6/logo-1.jpg"
+                },
+                "sameAs": [
+                    "https://www.facebook.com/share/1ENADaTtSn/",
+                    "https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==",
+                    "https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1",
+                    "https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09"
+                ]
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://trafico.com/bonus-request/#webpage",
+                "url": "{% url 'dashboard:bonus_request' %}",
+                "name": "{% trans 'طلب مكافأة' %}",
+                "description": "{% trans 'قم بطلب مكافأتك مع ترافيكو بناءً على الطلبات المكتملة.' %}",
+                "breadcrumb": {
+                    "@id": "https://trafico.com/bonus-request/#breadcrumb"
+                },
+                "inLanguage": "{{ LANGUAGE_CODE }}"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://trafico.com/bonus-request/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trafico",
+                        "item": "https://trafico.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{% trans 'طلب مكافأة' %}",
+                        "item": "{% url 'dashboard:bonus_request' %}"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/bonus_request.css' %}?v={% now 'U' %}">
+</head>
+<body class="{% if request.session.theme %}{{ request.session.theme }}{% else %}light-mode{% endif %}">
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+        <button class="hamburger" aria-label="Toggle Menu">☰</button>
+        <div class="nav-links">
+            <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
+            <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
+            <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
+            <a href="{% url 'products:cart' %}" class="nav-link icon" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">🛒</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users:logout' %}" class="nav-link" data-en="Logout" data-ar="{% trans 'تسجيل الخروج' %}">{% trans "تسجيل الخروج" %}</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link" data-en="Login" data-ar="{% trans 'تسجيل الدخول' %}">{% trans "تسجيل الدخول" %}</a>
+            {% endif %}
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-title-en="Toggle Dark Mode" data-title-ar="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-title-en="Toggle Language" data-title-ar="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 data-en="Bonus Request" data-ar="{% trans 'طلب مكافأة' %}">{% trans "طلب مكافأة" %}</h1>
+            <p data-en="Request your bonus with Trafico based on your completed orders." data-ar="{% trans 'قم بطلب مكافأتك مع ترافيكو بناءً على الطلبات المكتملة.' %}">{% trans "قم بطلب مكافأتك مع ترافيكو بناءً على الطلبات المكتملة." %}</p>
+        </div>
+    </div>
+    <main class="container">
+        <h2 data-en="Bonus Request" data-ar="{% trans 'طلب مكافأة' %}">{% trans "طلب مكافأة" %}</h2>
+        <p data-en="Completed Orders: {{ completed_orders }}" data-ar="{% trans 'عدد الطلبات المكتملة' %}: {{ completed_orders }}">{% trans "عدد الطلبات المكتملة" %}: {{ completed_orders }}</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="full_name" data-en="Full Name" data-ar="{% trans 'الاسم الكامل' %}">{% trans "الاسم الكامل" %}:</label>
+                <input type="text" id="full_name" name="full_name" required class="form-control" value="{{ user.profile.full_name|default:user.username }}">
+            </div>
+            <button type="submit" class="btn-primary" data-en="Submit Request" data-ar="{% trans 'إرسال الطلب' %}">{% trans "إرسال الطلب" %}</button>
+        </form>
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="form-error" data-en="{{ message }}" data-ar="{{ message }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+    <footer class="footer">
+        <p data-en="Trafico Created by Creativity Code © 2025" data-ar="{% trans 'ترافيكو من إنشاء شركة كريتيفيتي كود © 2025' %}">{% trans "ترافيكو من إنشاء شركة كريتيفيتي كود © 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">📘</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">📸</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">🎵</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">🐦</a>
+        </div>
+    </footer>
+    <script src="{% static 'js/bonus_request.js' %}?v={% now 'U' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-link');
+                
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

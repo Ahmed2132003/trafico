@@ -1,0 +1,74 @@
+# English translations for Trafico project
+msgid ""
+msgstr ""
+"Project-Id-Version: Trafico\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-08 09:18+0200\n"
+"PO-Revision-Date: 2025-08-08 09:18+0200\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: English <en@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "المنتجات - ترافيكو"
+msgstr "Products - Trafico"
+
+msgid "تسوق أفضل المنتجات من ترافيكو، واكتشف تصاميم فريدة من مصممين موهوبين مع فرص تسويق بالعمولة."
+msgstr "Shop the best products from Trafico, discover unique designs by talented designers, and seize affiliate marketing opportunities."
+
+msgid "منتجات, تسوق, ترافيكو, تسويق بالعمولة, تصاميم ملابس, مصممين, مسوقين"
+msgstr "products, shopping, Trafico, affiliate marketing, clothing designs, designers, marketers"
+
+msgid "استمتع بتجربة تسوق مميزة مع منتجات ترافيكو المصممة بعناية، وانضم إلى شبكة المسوقين والمصممين."
+msgstr "Enjoy a unique shopping experience with Trafico's carefully designed products and join our network of marketers and designers."
+
+msgid "تسوق منتجات مميزة وشارك في التسويق بالعمولة مع ترافيكو."
+msgstr "Shop premium products and participate in affiliate marketing with Trafico."
+
+msgid "تصفح مجموعة متنوعة من المنتجات المصممة بعناية، وانضم إلى مجتمع المسوقين والمصممين في ترافيكو."
+msgstr "Browse a variety of carefully designed products and join Trafico's community of marketers and designers."
+
+msgid "تسوق منتجات ترافيكو المميزة"
+msgstr "Shop Trafico's Premium Products"
+
+msgid "اكتشف تشكيلة فريدة من المنتجات المصممة بعناية، وانضم إلى مجتمع المسوقين والمصممين لتحقيق أرباحك!"
+msgstr "Discover a unique collection of carefully designed products and join the community of marketers and designers to earn profits!"
+
+msgid "المنتجات"
+msgstr "Products"
+
+msgid "إضافة منتج"
+msgstr "Add Product"
+
+msgid "السعر"
+msgstr "Price"
+
+msgid "جنيه"
+msgstr "EGP"
+
+msgid "المخزون"
+msgstr "Stock"
+
+msgid "عرض التفاصيل"
+msgstr "View Details"
+
+msgid "إزالة من المفضلة"
+msgstr "Remove from Favorites"
+
+msgid "إضافة إلى المفضلة"
+msgstr "Add to Favorites"
+
+msgid "إضافة إلى العربة"
+msgstr "Add to Cart"
+
+msgid "تعديل"
+msgstr "Edit"
+
+msgid "حذف"
+msgstr "Delete"
+
+msgid "لا توجد منتجات متاحة"
+msgstr "No products available"

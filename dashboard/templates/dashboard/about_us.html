@@ -1,0 +1,165 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "من نحن - ترافيكو" %}</title>
+    <meta name="description" content="{% trans 'تعرف على ترافيكو، منصة التسوق والتسويق بالعمولة التي تجمع بين المصممين المبدعين والمسوقين الطموحين.' %}">
+    <meta name="keywords" content="{% trans 'ترافيكو, من نحن, تسويق بالعمولة, تصميم ملابس, مصممين, مسوقين' %}">
+    <link rel="canonical" href="{% url 'dashboard:about_us' %}">
+    <meta property="og:title" content="{% trans 'من نحن - ترافيكو' %}">
+    <meta property="og:description" content="{% trans 'ترافيكو هي منصة تجمع بين التسوق المميز والتسويق بالعمولة، مع دعم المصممين والمسوقين.' %}">
+    <meta property="og:image" content="https://i.postimg.cc/HnJmbnH4/about-us.jpg">
+    <meta property="og:url" content="{% url 'dashboard:about_us' %}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'من نحن - ترافيكو' %}">
+    <meta name="twitter:description" content="{% trans 'اكتشف رؤية ترافيكو وانضم إلى مجتمعنا من المصممين والمسوقين.' %}">
+    <meta name="twitter:image" content="https://i.postimg.cc/HnJmbnH4/about-us.jpg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://trafico.com/#organization",
+                "name": "Trafico",
+                "url": "https://trafico.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.postimg.cc/FzSYsKp6/logo-1.jpg"
+                },
+                "sameAs": [
+                    "https://www.facebook.com/share/1ENADaTtSn/",
+                    "https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==",
+                    "https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1",
+                    "https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09"
+                ]
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://trafico.com/about/#webpage",
+                "url": "{% url 'dashboard:about_us' %}",
+                "name": "{% trans 'من نحن - ترافيكو' %}",
+                "description": "{% trans 'تعرف على رؤية ترافيكو، منصة التسوق والتسويق التي تدعم المبدعين.' %}",
+                "breadcrumb": {
+                    "@id": "https://trafico.com/about/#breadcrumb"
+                },
+                "inLanguage": "{{ LANGUAGE_CODE }}"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://trafico.com/about/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trafico",
+                        "item": "https://trafico.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{% trans 'من نحن' %}",
+                        "item": "{% url 'dashboard:about_us' %}"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/about_us.css' %}">
+</head>
+<body class="{% if request.session.theme %}{{ request.session.theme }}{% else %}light-mode{% endif %}">
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+        <button class="hamburger" aria-label="Toggle Menu">☰</button>
+        <div class="nav-links">
+            <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
+            <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
+            <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
+            <a href="{% url 'products:cart' %}" class="nav-link icon" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">🛒</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users:logout' %}" class="nav-link" data-en="Logout" data-ar="{% trans 'تسجيل الخروج' %}">{% trans "تسجيل الخروج" %}</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link" data-en="Login" data-ar="{% trans 'تسجيل الدخول' %}">{% trans "تسجيل الدخول" %}</a>
+            {% endif %}
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-title-en="Toggle Dark Mode" data-title-ar="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-title-en="Toggle Language" data-title-ar="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 data-en="Who We Are at Trafico?" data-ar="{% trans 'من نحن في ترافيكو؟' %}">{% trans "من نحن في ترافيكو؟" %}</h1>
+            <p data-en="A platform connecting unique shopping with affiliate marketing, empowering designers and marketers." data-ar="{% trans 'منصة تجمع بين التسوق المميز والتسويق بالعمولة، لدعم المصممين والمسوقين الطموحين.' %}">{% trans "منصة تجمع بين التسوق المميز والتسويق بالعمولة، لدعم المصممين والمسوقين الطموحين." %}</p>
+        </div>
+    </div>
+    <main class="container">
+        
+        <section>
+            <h2 data-en="Our Vision" data-ar="{% trans 'رؤيتنا' %}">{% trans "رؤيتنا" %}</h2>
+            <p data-en="At Trafico, we aim to create a unique shopping experience that blends creativity and profitability. We are a platform that brings together talented designers who create innovative clothing designs and ambitious marketers who promote these products for rewarding profits. Our mission is to empower everyone to achieve their dreams through smart and sustainable shopping and marketing." data-ar="{% trans 'في ترافيكو، نسعى لخلق تجربة تسوق فريدة تجمع بين الإبداع والربح. نحن منصة تجمع المصممين الموهوبين الذين يصنعون تصاميم ملابس مبتكرة، والمسوقين الطموحين الذين يروجون لهذه المنتجات لتحقيق أرباح مجزية. مهمتنا هي تمكين الجميع من تحقيق أحلامهم من خلال التسوق والتسويق بطريقة ذكية ومستدامة.' %}">{% trans "في ترافيكو، نسعى لخلق تجربة تسوق فريدة تجمع بين الإبداع والربح. نحن منصة تجمع المصممين الموهوبين الذين يصنعون تصاميم ملابس مبتكرة، والمسوقين الطموحين الذين يروجون لهذه المنتجات لتحقيق أرباح مجزية. مهمتنا هي تمكين الجميع من تحقيق أحلامهم من خلال التسوق والتسويق بطريقة ذكية ومستدامة." %}</p>
+            <h2 data-en="Why Trafico?" data-ar="{% trans 'لماذا ترافيكو؟' %}">{% trans "لماذا ترافيكو؟" %}</h2>
+            <ul>
+                <li data-en="Products designed with care by creative designers." data-ar="{% trans 'منتجات مصممة بعناية من مصممين مبدعين.' %}">{% trans "منتجات مصممة بعناية من مصممين مبدعين." %}</li>
+                <li data-en="High-profit affiliate marketing opportunities." data-ar="{% trans 'فرص تسويق بالعمولة بأرباح عالية.' %}">{% trans "فرص تسويق بالعمولة بأرباح عالية." %}</li>
+                <li data-en="A supportive community for designers and marketers." data-ar="{% trans 'مجتمع داعم للمصممين والمسوقين.' %}">{% trans "مجتمع داعم للمصممين والمسوقين." %}</li>
+                <li data-en="An easy and enjoyable shopping experience." data-ar="{% trans 'تجربة تسوق سهلة وممتعة.' %}">{% trans "تجربة تسوق سهلة وممتعة." %}</li>
+            </ul>
+        </section>
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="form-error notification {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+    <footer class="footer">
+        <p data-en="Trafico Created by Creativity Code © 2025" data-ar="{% trans 'ترافيكو من إنشاء شركة كريتيفيتي كود © 2025' %}">{% trans "ترافيكو من إنشاء شركة كريتيفيتي كود © 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">📘</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">📸</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">🎵</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">🐦</a>
+        </div>
+    </footer>
+    <script src="{% static 'js/about_us.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-link');
+                
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                });
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% trans "تعديل المنتج" %} - {{ product.name }}</title>
+    <meta name="description" content="{% trans 'قم بتعديل تفاصيل المنتج في ترافيكو.' %}">
+    <meta name="keywords" content="{% trans 'تعديل المنتج, ترافيكو, إدارة المنتجات' %}">
+    <link rel="canonical" href="{% url 'products:product_edit' product.id %}">
+    <meta property="og:title" content="{% trans 'تعديل المنتج - ترافيكو' %}">
+    <meta property="og:description" content="{% trans 'قم بتعديل تفاصيل المنتج في ترافيكو.' %}">
+    <meta property="og:image" content="https://i.postimg.cc/hjt3DgXh/edit-products.jpg">
+    <meta property="og:url" content="{% url 'products:product_edit' product.id %}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'تعديل المنتج - ترافيكو' %}">
+    <meta name="twitter:description" content="{% trans 'قم بتعديل تفاصيل المنتج في ترافيكو.' %}">
+    <meta name="twitter:image" content="https://i.postimg.cc/hjt3DgXh/edit-products.jpg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://trafico.com/#organization",
+                "name": "Trafico",
+                "url": "https://trafico.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.postimg.cc/FzSYsKp6/logo-1.jpg"
+                },
+                "sameAs": [
+                    "https://www.facebook.com/share/1ENADaTtSn/",
+                    "https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==",
+                    "https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1",
+                    "https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09"
+                ]
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://trafico.com/product/edit/#webpage",
+                "url": "{% url 'products:product_edit' product.id %}",
+                "name": "{% trans 'تعديل المنتج' %} - {{ product.name }}",
+                "description": "{% trans 'قم بتعديل تفاصيل المنتج في ترافيكو.' %}",
+                "breadcrumb": {
+                    "@id": "https://trafico.com/product/edit/#breadcrumb"
+                },
+                "inLanguage": "{{ LANGUAGE_CODE }}"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://trafico.com/product/edit/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trafico",
+                        "item": "https://trafico.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{% trans 'تعديل المنتج' %}",
+                        "item": "{% url 'products:product_edit' product.id %}"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/product_edit.css' %}?v={% now 'U' %}">
+    <script>
+        window.productImages = {{ images_json|safe }};
+    </script>
+</head>
+<body class="{% if request.session.theme %}{{ request.session.theme }}{% else %}light-mode{% endif %}">
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
+        </div>
+        <button class="hamburger" aria-label="Toggle Menu">☰</button>
+        <div class="nav-links">
+            <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
+            <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
+            <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
+            <a href="{% url 'products:cart' %}" class="nav-link icon" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">🛒</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users:logout' %}" class="nav-link" data-en="Logout" data-ar="{% trans 'تسجيل الخروج' %}">{% trans "تسجيل الخروج" %}</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link" data-en="Login" data-ar="{% trans 'تسجيل الدخول' %}">{% trans "تسجيل الدخول" %}</a>
+            {% endif %}
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-title-en="Toggle Dark Mode" data-title-ar="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+            </button>
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-title-en="Toggle Language" data-title-ar="{% trans 'تبديل اللغة' %}">
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+            </button>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 data-en="Edit Product" data-ar="{% trans 'تعديل المنتج' %}">{% trans "تعديل المنتج" %}</h1>
+            <p data-en="Update the details of {{ product.name }}" data-ar="{% trans 'تحديث تفاصيل' %} {{ product.name }}">{% trans "تحديث تفاصيل" %} {{ product.name }}</p>
+        </div>
+    </div>
+    <main class="container">
+       
+        <form method="post" action="{% url 'products:product_edit' product.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name" data-en="Product Name" data-ar="{% trans 'اسم المنتج' %}">{% trans "اسم المنتج" %}</label>
+                <input type="text" id="name" name="name" value="{{ product.name }}" required class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="description" data-en="Description" data-ar="{% trans 'الوصف' %}">{% trans "الوصف" %}</label>
+                <textarea id="description" name="description" class="form-input">{{ product.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="base_price" data-en="Base Price (EGP)" data-ar="{% trans 'السعر الأساسي (جنيه)' %}">{% trans "السعر الأساسي (جنيه)" %}</label>
+                <input type="number" id="base_price" name="base_price" step="0.01" min="0" value="{{ product.base_price|floatformat:2 }}" required class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="image" data-en="Main Image URL" data-ar="{% trans 'رابط الصورة الرئيسية' %}">{% trans "رابط الصورة الرئيسية" %}</label>
+                <input type="url" id="image" name="image" value="{{ product.image|default:'' }}" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="images" data-en="Additional Images (comma-separated URLs)" data-ar="{% trans 'صور إضافية (روابط مفصولة بفواصل)' %}">{% trans "صور إضافية (روابط مفصولة بفواصل)" %}</label>
+                <input type="text" id="images" name="images" value="{{ images_json|safe }}" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="stock" data-en="Stock" data-ar="{% trans 'المخزون' %}">{% trans "المخزون" %}</label>
+                <input type="number" id="stock" name="stock" min="0" value="{{ product.stock }}" required class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="colors" data-en="Colors (comma-separated)" data-ar="{% trans 'الألوان (مفصولة بفواصل)' %}">{% trans "الألوان (مفصولة بفواصل)" %}</label>
+                <input type="text" id="colors" name="colors" value="{% for color in product.colors.all %}{{ color.color }}{% if not forloop.last %},{% endif %}{% endfor %}" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="color_stocks" data-en="Color Stocks (comma-separated)" data-ar="{% trans 'مخزون الألوان (مفصول بفواصل)' %}">{% trans "مخزون الألوان (مفصول بفواصل)" %}</label>
+                <input type="text" id="color_stocks" name="color_stocks" value="{% for color in product.colors.all %}{{ color.stock }}{% if not forloop.last %},{% endif %}{% endfor %}" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="sizes" data-en="Sizes (comma-separated)" data-ar="{% trans 'المقاسات (مفصولة بفواصل)' %}">{% trans "المقاسات (مفصولة بفواصل)" %}</label>
+                <input type="text" id="sizes" name="sizes" value="{% for size in product.sizes.all %}{{ size.size }}{% if not forloop.last %},{% endif %}{% endfor %}" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="size_stocks" data-en="Size Stocks (comma-separated)" data-ar="{% trans 'مخزون المقاسات (مفصول بفواصل)' %}">{% trans "مخزون المقاسات (مفصول بفواصل)" %}</label>
+                <input type="text" id="size_stocks" name="size_stocks" value="{% for size in product.sizes.all %}{{ size.stock }}{% if not forloop.last %},{% endif %}{% endfor %}" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="design_ownership" data-en="Design Ownership" data-ar="{% trans 'ملكية التصميم' %}">{% trans "ملكية التصميم" %}</label>
+                <select id="design_ownership" name="design_ownership" class="form-input">
+                    <option value="platform" {% if product.design_ownership == 'platform' %}selected{% endif %}>{% trans "منصة" %}</option>
+                    <option value="designer" {% if product.design_ownership == 'designer' %}selected{% endif %}>{% trans "مصمم" %}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="design_id" data-en="Design" data-ar="{% trans 'التصميم' %}">{% trans "التصميم" %}</label>
+                <select id="design_id" name="design_id" class="form-input">
+                    <option value="">{% trans "لا يوجد" %}</option>
+                    {% for design in designs %}
+                        <option value="{{ design.id }}" {% if product.design == design %}selected{% endif %}>{{ design.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn-primary" data-en="Save Changes" data-ar="{% trans 'حفظ التغييرات' %}">{% trans "حفظ التغييرات" %}</button>
+        </form>
+        <a href="{% url 'products:product_list' %}" class="btn-primary" data-en="Back to Products" data-ar="{% trans 'رجوع إلى المنتجات' %}">{% trans "رجوع إلى المنتجات" %}</a>
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="form-error notification {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+    <footer class="footer">
+        <p data-en="Trafico Created by Creativity Code © 2025" data-ar="{% trans 'ترافيكو من إنشاء شركة كريتيفيتي كود © 2025' %}">{% trans "ترافيكو من إنشاء شركة كريتيفيتي كود © 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">📘</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">📸</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">🎵</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">🐦</a>
+        </div>
+    </footer>
+    <script src="{% static 'js/product_edit.js' %}?v={% now 'U' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-link');
+                
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+                
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                });
+            });
+                
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    hamburger.textContent = '☰';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

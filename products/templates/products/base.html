@@ -1,0 +1,45 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}{% trans "ترافيكو" %}{% endblock %}</title>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
+    <link rel="stylesheet" href="{% static 'css/product_list.css' %}?v={% now 'U' %}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="{% trans 'شعار ترافيكو' %}" class="logo">
+        </div>
+        <nav class="nav-links">
+            <a href="{% url 'products:product_list' %}" class="nav-link">{% trans "المنتجات" %}</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'users:logout' %}" class="nav-link">{% trans "تسجيل الخروج" %}</a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link">{% trans "تسجيل الدخول" %}</a>
+            {% endif %}
+            <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل إلى الإنجليزية' %}">
+                <span class="lang-icon">🇸🇦</span>
+            </button>
+            <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}">
+                <span class="mode-icon">🌙</span>
+            </button>
+        </nav>
+    </header>
+    {% block content %}
+    {% endblock %}
+    <footer class="footer">
+        <p>{% trans " جميع الحقوق محفوظة © ترافيكو مقدم من شركة كريتيفتي كود للبرمجة 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">FB</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">IG</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">TT</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">TW</a>
+        </div>
+    </footer>
+    <script src="{% static 'js/base.js' %}?v={% now 'U' %}"></script>
+</body>
+</html>
