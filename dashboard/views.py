@@ -17,7 +17,7 @@ from django.http import JsonResponse
 import json
 from django.utils.translation import activate
 import logging
-
+from django.urls import reverse
 # إعداد Logging
 logger = logging.getLogger(__name__)
 
@@ -42,9 +42,11 @@ def set_language(request, lang_code):
             return JsonResponse({'status': 'success', 'language': lang_code})
         return JsonResponse({'status': 'error', 'message': 'Invalid language code'}, status=400)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
-@login_required
+
 def dashboard(request):
     user = request.user
+    if not user.is_authenticated or (not user.is_superuser and user.user_type == 'customer'):
+        return redirect(reverse('products:product_list'))
     period = request.GET.get('period', 'month')
     now = timezone.now()
     if period == '90days':
@@ -199,6 +201,7 @@ def withdrawal_request(request):
         address = request.POST.get('address')
         phone_number = request.POST.get('phone_number')
         wallet_number = request.POST.get('wallet_number')
+        payment_method = request.POST.get('payment_method')
         amount = Decimal(request.POST.get('amount', '0.00'))
         
         total_earnings = user.total_earnings or Decimal('0.00')
@@ -220,6 +223,7 @@ def withdrawal_request(request):
             address=address,
             phone_number=phone_number,
             wallet_number=wallet_number,
+            payment_method=payment_method,
             amount=amount,
             status='pending'
         )
@@ -250,7 +254,6 @@ def withdrawal_request(request):
         'user': user,
         'remaining_balance': remaining_balance,
     })
-
 @login_required
 @user_passes_test(user_is_designer, login_url='/dashboard/')
 def designer_withdrawal_request(request):
@@ -429,8 +432,15 @@ def manage_orders(request):
         'total_orders': orders.count(),
     }
     
+    # تعديل: استخدام username آمن للطلبات بدون مستخدم
+    completed_orders_data = [
+        (order.id, order.created_at, order.status, 
+         order.user.username if order.user else 'غير مسجل')
+        for order in orders.filter(status='completed')
+    ]
+    
     print(f"Manage Orders - Username: {request.user.username}, Total Orders: {orders.count()}, Completed Orders: {stats['completed']}")
-    print(f"Completed Orders IDs and Dates: {[(order.id, order.created_at, order.status, order.user.username) for order in orders.filter(status='completed')]}")
+    print(f"Completed Orders IDs and Dates: {completed_orders_data}")
     print(f"Start Date: {start_date}")
     print(f"Orders in Paginator: {[(order.id, order.created_at) for order in page_obj]}")
     
@@ -450,13 +460,14 @@ def manage_orders(request):
                         with transaction.atomic():
                             item.marketer.total_earnings += item.marketer_commission * Decimal(str(item.quantity))
                             item.marketer.save()
-                            print(f"Updated total_earnings for marketer {item.marketer.username}: {item.marketer.total_earnings} (Commission: {item.marketer_commission * Decimal(str(item.quantity))})")
+                            print(f"Updated total_earnings for marketer {item.marketer.username}: {item.marketer.total_earnings}")
                     if item.product.design_ownership == 'designer' and item.product.design and item.product.designer:
                         with transaction.atomic():
                             item.product.designer.total_earnings += item.designer_commission * Decimal(str(item.quantity))
                             item.product.designer.save()
-                            print(f"Updated total_earnings for designer {item.product.designer.username}: {item.product.designer.total_earnings} (Commission: {item.designer_commission * Decimal(str(item.quantity))})")
+                            print(f"Updated total_earnings for designer {item.product.designer.username}: {item.product.designer.total_earnings}")
             
+            # إرسال إشعارات للمسوق والمصمم
             for item in order.order_items.all():
                 if item.marketer:
                     try:
@@ -498,8 +509,35 @@ def manage_orders(request):
         'stats': stats,
         'period': period,
     })
-
-
+@login_required
+@user_passes_test(user_is_superuser, login_url='/dashboard/')
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    
+    # إحصائيات بسيطة للطلب
+    stats = {
+        'total_items': order.order_items.count(),
+        'total_price': order.total_price,
+        'status': order.get_status_display(),
+        'created_at': order.created_at,
+        'customer_name': order.customer_name,
+        'phone_number': order.phone_number,
+        'address': order.address,
+        'governorate': order.governorate.name if order.governorate else 'غير محدد',
+        'notes': order.notes or 'لا توجد ملاحظات',
+    }
+    
+    # عناصر الطلب
+    items = order.order_items.all()
+    
+    print(f"Order Detail - Order ID: {order.id}, User: {order.user.username if order.user else 'غير مسجل'}, Total Items: {stats['total_items']}")
+    
+    return render(request, 'dashboard/order_detail.html', {
+        'order': order,
+        'items': items,
+        'stats': stats,
+    })
+    
 @login_required
 @user_passes_test(user_is_superuser, login_url='/dashboard/')
 def manage_products(request):

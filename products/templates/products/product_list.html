@@ -1,3 +1,4 @@
+<!-- templates/products/product_list.html -->
 {% load i18n static %}
 <!DOCTYPE html>
 <html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
@@ -81,7 +82,13 @@
         <button class="hamburger" aria-label="Toggle Menu">☰</button>
         <div class="nav-links">
             <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
-            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            {% if user.is_authenticated %}
+                {% if user.is_superuser or user.user_type != 'customer' %}
+                    <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">
+                        {% trans "لوحة التحكم" %}
+                    </a>
+                {% endif %}
+            {% endif %}
             <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
             <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
             <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
@@ -131,11 +138,11 @@
                                     {% endif %}
                                 </button>
                             </form>
-                            <a href="{% url 'products:add_to_cart' item.product.id %}" class="btn-primary">{% trans "إضافة إلى العربة" %}</a>
-                            {% if user.is_superuser %}
-                                <a href="{% url 'products:product_edit' item.product.id %}" class="btn-primary">{% trans "تعديل" %}</a>
-                                <a href="{% url 'products:product_delete' item.product.id %}" class="btn-primary">{% trans "حذف" %}</a>
-                            {% endif %}
+                        {% endif %}
+                        <a href="{% url 'products:add_to_cart' item.product.id %}" class="btn-primary">{% trans "إضافة إلى العربة" %}</a>
+                        {% if user.is_superuser %}
+                            <a href="{% url 'products:product_edit' item.product.id %}" class="btn-primary">{% trans "تعديل" %}</a>
+                            <a href="{% url 'products:product_delete' item.product.id %}" class="btn-primary">{% trans "حذف" %}</a>
                         {% endif %}
                     </div>
                 </div>

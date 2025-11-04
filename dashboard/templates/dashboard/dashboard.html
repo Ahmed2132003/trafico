@@ -163,13 +163,11 @@
             {% elif user_type == 'marketer' %}
                 <a href="{% url 'dashboard:withdrawal_request' %}" class="btn-primary" data-en="Request Withdrawal" data-ar="{% trans 'طلب سحب أرباح' %}">{% trans "طلب سحب أرباح" %}</a>
                 <a href="{% url 'dashboard:withdrawal_history' %}" class="btn-primary" data-en="Transaction History" data-ar="{% trans 'سجل المعاملات المالية' %}">{% trans "سجل المعاملات المالية" %}</a>
-                <a href="{% url 'dashboard:bonus_request' %}" class="btn-primary" data-en="Request Bonus" data-ar="{% trans 'طلب مكافأة' %}">{% trans "طلب مكافأة" %}</a>
                 <a href="{% url 'dashboard:order_stats' %}" class="btn-primary" data-en="Order Statistics" data-ar="{% trans 'إحصائيات الطلبات الكلية' %}">{% trans "إحصائيات الطلبات الكلية" %}</a>
             {% elif user_type == 'designer' %}
                 <a href="{% url 'dashboard:submit_design' %}" class="btn-primary" data-en="Submit New Design" data-ar="{% trans 'تقديم تصميم جديد' %}">{% trans "تقديم تصميم جديد" %}</a>
                 <a href="{% url 'dashboard:designer_withdrawal_request' %}" class="btn-primary" data-en="Request Withdrawal" data-ar="{% trans 'طلب سحب أرباح' %}">{% trans "طلب سحب أرباح" %}</a>
                 <a href="{% url 'dashboard:withdrawal_history' %}" class="btn-primary" data-en="Transaction History" data-ar="{% trans 'سجل المعاملات المالية' %}">{% trans "سجل المعاملات المالية" %}</a>
-                <a href="{% url 'dashboard:bonus_request' %}" class="btn-primary" data-en="Request Bonus" data-ar="{% trans 'طلب مكافأة' %}">{% trans "طلب مكافأة" %}</a>
             {% endif %}
         </div>
         {% if user_type == 'designer' %}

@@ -1,69 +1,81 @@
+{# templates/products/create_order.html #}
 {% load i18n static %}
+
 <!DOCTYPE html>
 <html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{% trans "إنشاء طلب" %}</title>
+    <title>{% trans "إنشاء الطلب - ترافيكو" %}</title>
+    <meta name="description" content="{% trans 'أكمل طلبك في ترافيكو، وحدد تفاصيل الشحن والدفع مع دعم للمسوقين بالعمولة.' %}">
+    <meta name="keywords" content="{% trans 'إنشاء طلب, تسوق, ترافيكو, تسويق بالعمولة, تصاميم ملابس, مصممين, مسوقين' %}">
+    <link rel="canonical" href="{% url 'products:create_order' %}">
+    <meta property="og:title" content="{% trans 'إنشاء الطلب - ترافيكو' %}">
+    <meta property="og:description" content="{% trans 'أكمل عملية الشراء في ترافيكو مع خيارات شحن مرنة ودعم للمسوقين والمصممين.' %}">
+    <meta property="og:image" content="https://i.postimg.cc/vZ5QP4n0/proudcts.jpg">
+    <meta property="og:url" content="{% url 'products:create_order' %}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% trans 'إنشاء الطلب - ترافيكو' %}">
+    <meta name="twitter:description" content="{% trans 'أكمل طلبك واستمتع بتجربة تسوق آمنة في ترافيكو.' %}">
+    <meta name="twitter:image" content="https://i.postimg.cc/vZ5QP4n0/proudcts.jpg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://trafico.com/#organization",
+                "name": "Trafico",
+                "url": "https://trafico.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.postimg.cc/FzSYsKp6/logo-1.jpg"
+                },
+                "sameAs": [
+                    "https://www.facebook.com/share/1ENADaTtSn/",
+                    "https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==",
+                    "https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1",
+                    "https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09"
+                ]
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://trafico.com/order/create/#webpage",
+                "url": "{% url 'products:create_order' %}",
+                "name": "{% trans 'إنشاء الطلب - ترافيكو' %}",
+                "description": "{% trans 'صفحة إنشاء الطلب في ترافيكو، مع ملخص العربة وتفاصيل الشحن.' %}",
+                "breadcrumb": {
+                    "@id": "https://trafico.com/order/create/#breadcrumb"
+                },
+                "inLanguage": "{{ LANGUAGE_CODE }}"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://trafico.com/order/create/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trafico",
+                        "item": "https://trafico.com/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{% trans 'إنشاء الطلب' %}",
+                        "item": "{% url 'products:create_order' %}"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
     <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/FzSYsKp6/logo-1.jpg">
-    <link rel="stylesheet" href="{% static 'css/product_list.css' %}?v={% now 'U' %}">
-    <style>
-        .form-group {
-            margin: 15px 0;
-        }
-        .form-control {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 100%;
-        }
-        .btn-primary {
-            padding: 10px 20px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn-primary:hover {
-            background: #2980b9;
-        }
-        .cart-summary {
-            margin: 20px 0;
-            padding: 15px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .cart-summary h3 {
-            margin-top: 0;
-        }
-        .cart-summary table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .cart-summary th, .cart-summary td {
-            padding: 10px;
-            text-align: right;
-            border-bottom: 1px solid #ddd;
-        }
-        .total-price {
-            font-weight: bold;
-            margin-top: 20px;
-            font-size: 18px;
-        }
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-        .disabled-option {
-            color: #999;
-            pointer-events: none;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/create_order.css' %}?v={% now 'U' %}">
 </head>
-<body class="{% if request.session.theme %}{{ request.session.theme }}{% else %}light-mode{% endif %}">
+<body>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
     <header class="header">
         <div class="logo-container">
             <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
@@ -71,7 +83,13 @@
         <button class="hamburger" aria-label="Toggle Menu">☰</button>
         <div class="nav-links">
             <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
-            <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
+            {% if user.is_authenticated %}
+                {% if user.is_superuser or user.user_type != 'customer' %}
+                    <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">
+                        {% trans "لوحة التحكم" %}
+                    </a>
+                {% endif %}
+            {% endif %}
             <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
             <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
             <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
@@ -89,145 +107,136 @@
             </button>
         </div>
     </header>
-    <main class="container">
-        <h2 data-en="Create Order" data-ar="{% trans 'إنشاء طلب' %}">{% trans "إنشاء طلب" %}</h2>
-        <p>{% trans "حالة المستخدم" %}: {{ user.is_authenticated|yesno:_("مسجل دخول,غير مسجل") }}</p>
-        <form method="post" action="{% url 'products:create_order' %}">
+    <section class="hero" style="background-image: url('https://i.postimg.cc/vZ5QP4n0/proudcts.jpg');">
+        <div class="hero-content">
+            <h1>{% trans "ملخص العربة وإنشاء الطلب" %}</h1>
+            <p>{% trans "أكمل طلبك الآن واستمتع بتجربة تسوق سلسة مع ترافيكو!" %}</p>
+        </div>
+    </section>
+    <section class="container">
+        <h2>{% trans "ملخص العربة وإنشاء الطلب" %}</h2>
+        <form method="post">
             {% csrf_token %}
-            {% if cart_items %}
-                <div class="cart-summary">
-                    <h3>{% trans "ملخص العربة" %}</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>{% trans "المنتج" %}</th>
-                                <th>{% trans "اللون" %}</th>
-                                <th>{% trans "المقاس" %}</th>
-                                <th>{% trans "الكمية" %}</th>
-                                <th>{% trans "السعر" %}</th>
-                                <th>{% trans "عمولة المسوق" %}</th>
-                                <th>{% trans "الإجمالي" %}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in cart_items %}
-                                <tr>
-                                    <td>{{ item.product.name }}</td>
-                                    <td>
-                                        <select name="color_{{ item.id }}" class="form-control color-select" data-item-id="{{ item.id }}" required>
-                                            <option value="" disabled {% if not item.color %}selected{% endif %}>{% trans "اختر اللون" %}</option>
-                                            {% for color in item.product.colors.all %}
-                                                {% if color.stock > 0 %}
-                                                    <option value="{{ color.color }}" {% if item.color == color.color %}selected{% endif %} data-stock="{{ color.stock }}">
-                                                        {{ color.color }} ({{ color.stock }} {% trans "متوفر" %})
-                                                    </option>
-                                                {% else %}
-                                                    <option value="{{ color.color }}" disabled class="disabled-option">
-                                                        {{ color.color }} (0 {% trans "غير متوفر" %})
-                                                    </option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                        <div class="error-message" id="color-error-{{ item.id }}"></div>
-                                    </td>
-                                    <td>
-                                        <select name="size_{{ item.id }}" class="form-control size-select" data-item-id="{{ item.id }}" required>
-                                            <option value="" disabled {% if not item.size %}selected{% endif %}>{% trans "اختر المقاس" %}</option>
-                                            {% for size in item.product.sizes.all %}
-                                                {% if size.stock > 0 %}
-                                                    <option value="{{ size.size }}" {% if item.size == size.size %}selected{% endif %} data-stock="{{ size.stock }}">
-                                                        {{ size.size }} ({{ size.stock }} {% trans "متوفر" %})
-                                                    </option>
-                                                {% else %}
-                                                    <option value="{{ size.size }}" disabled class="disabled-option">
-                                                        {{ size.size }} (0 {% trans "غير متوفر" %})
-                                                    </option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                        <div class="error-message" id="size-error-{{ item.id }}"></div>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="quantity_{{ item.id }}" class="form-control quantity-input" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" data-item-id="{{ item.id }}" required>
-                                        <div class="error-message" id="quantity-error-{{ item.id }}"></div>
-                                    </td>
-                                    <td>
-                                        {% if item.product.design_ownership == 'designer' and item.product.design and item.product.design.status == 'approved' %}
-                                            <span class="item-price" data-base-price="{{ item.product.base_price|floatformat:2 }}" data-designer-commission="{{ item.product.design.commission_per_sale|floatformat:2 }}">{{ item.product.base_price|add:item.product.design.commission_per_sale|floatformat:2 }}</span> {% trans "جنيه" %}
-                                        {% else %}
-                                            <span class="item-price" data-base-price="{{ item.product.base_price|floatformat:2 }}" data-designer-commission="0.00">{{ item.product.base_price|floatformat:2 }}</span> {% trans "جنيه" %}
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <span class="item-commission" data-commission="{{ item.marketer_commission|floatformat:2 }}">{{ item.marketer_commission|floatformat:2 }}</span> {% trans "جنيه" %}
-                                    </td>
-                                    <td>
-                                        <span class="item-total">
-                                            {% if item.product.design_ownership == 'designer' and item.product.design and item.product.design.status == 'approved' %}
-                                                {{ item.product.base_price|add:item.product.design.commission_per_sale|add:item.marketer_commission|floatformat:2 }}
-                                            {% else %}
-                                                {{ item.product.base_price|add:item.marketer_commission|floatformat:2 }}
-                                            {% endif %}
-                                        </span> {% trans "جنيه" %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    <div class="total-price">
-                        <p data-en="Subtotal: {{ total_cart_price|floatformat:2 }} EGP" data-ar="{% trans 'المجموع الفرعي' %}: {{ total_cart_price|floatformat:2 }} {% trans 'جنيه' %}">
-                            {% trans "المجموع الفرعي" %}: <span id="subtotal">{{ total_cart_price|floatformat:2 }}</span> {% trans "جنيه" %}
-                        </p>
-                        <p data-en="Shipping Cost: " data-ar="{% trans 'تكلفة الشحن' %}: ">
-                            {% trans "تكلفة الشحن" %}: <span id="shipping-cost">{{ governorates.0.shipping_cost|default:'0.00' }}</span> {% trans "جنيه" %}
-                        </p>
-                        <p data-en="Total Price: " data-ar="{% trans 'السعر الإجمالي' %}: ">
-                            {% trans "السعر الإجمالي" %}: <span id="total-price">{{ total_cart_price|add:governorates.0.shipping_cost|floatformat:2 }}</span> {% trans "جنيه" %}
-                        </p>
-                    </div>
-                </div>
-            {% else %}
-                <p>{% trans "العربة فارغة" %}</p>
-            {% endif %}
-            <div class="form-group">
-                <label for="customer_name" data-en="Customer Name" data-ar="{% trans 'اسم العميل' %}">{% trans "اسم العميل" %}</label>
-                <input type="text" id="customer_name" name="customer_name" required class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="phone_number" data-en="Phone Number" data-ar="{% trans 'رقم الهاتف' %}">{% trans "رقم الهاتف" %}</label>
-                <input type="text" id="phone_number" name="phone_number" required class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="secondary_phone_number" data-en="Secondary Phone Number" data-ar="{% trans 'رقم هاتف ثانٍ' %}">{% trans "رقم هاتف ثانٍ" %}</label>
-                <input type="text" id="secondary_phone_number" name="secondary_phone_number" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="governorate" data-en="Governorate" data-ar="{% trans 'المحافظة' %}">{% trans "المحافظة" %}</label>
-                <select id="governorate" name="governorate" required class="form-control">
-                    {% for governorate in governorates %}
-                        <option value="{{ governorate.id }}" data-shipping-cost="{{ governorate.shipping_cost }}">{{ governorate.name }}</option>
+
+            <!-- جدول ملخص العربة -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% trans "المنتج" %}</th>
+                        <th>{% trans "اللون" %}</th>
+                        <th>{% trans "المقاس" %}</th>
+                        <th>{% trans "الكمية" %}</th>
+                        <th>{% trans "السعر" %}<br>({% trans "أساسي + عمولة مصمم" %})</th>
+                        <th>{% trans "عمولة المسوق" %}<br>({% trans "للقطعة" %})</th>
+                        <th>{% trans "الإجمالي" %}<br>({% trans "للسطر" %})</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detail in cart_item_details %}
+                    <tr>
+                        <td style="text-align: right;">
+                            {{ detail.product.name }}
+                            {% if detail.product.description %} | {{ detail.product.description }}{% endif %}
+                        </td>
+                        <td>
+                            <select name="color_{{ detail.item_id }}" required>
+                                {% for col in detail.product.colors.all %}
+                                <option value="{{ col.color }}" {% if detail.color == col.color %}selected{% endif %}>
+                                    {{ col.color }} {% if col.stock > 0 %}({% trans "متوفر" %}){% else %}({% trans "غير متوفر" %}){% endif %}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select name="size_{{ detail.item_id }}" required>
+                                {% for sz in detail.product.sizes.all %}
+                                <option value="{{ sz.size }}" {% if detail.size == sz.size %}selected{% endif %}>
+                                    {{ sz.size }} {% if sz.stock > 0 %}({% trans "متوفر" %}){% else %}({% trans "غير متوفر" %}){% endif %}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" name="quantity_{{ detail.item_id }}" value="{{ detail.quantity }}" min="1" max="{{ detail.product.stock }}" required>
+                        </td>
+                        <td>{{ detail.display_price|floatformat:2 }} {% trans "جنيه" %}</td>
+                        <td>{{ detail.marketer_comm|floatformat:2 }} {% trans "جنيه" %}</td>
+                        <td>{{ detail.line_total|floatformat:2 }} {% trans "جنيه" %}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">{% trans "العربة فارغة" %}. <a href="{% url 'products:cart' %}">{% trans "عودة إلى العربة" %}</a></td>
+                    </tr>
                     {% endfor %}
-                </select>
+                </tbody>
+            </table>
+
+            <!-- الإجمالات -->
+            <div class="summary">
+                <p>{% trans "المجموع الفرعي" %}: {{ total_cart_price|floatformat:2 }} {% trans "جنيه" %}</p>
+                <p>{% trans "تكلفة الشحن" %}: {{ shipping_cost|floatformat:2 }} {% trans "جنيه" %}</p>
+                <p>{% trans "السعر الإجمالي" %}: {{ grand_total|floatformat:2 }} {% trans "جنيه" %}</p>
             </div>
-            <div class="form-group">
-                <label for="shipping_cost" data-en="Shipping Cost" data-ar="{% trans 'تكلفة الشحن' %}">{% trans "تكلفة الشحن" %}</label>
-                <input type="text" id="shipping_cost" name="shipping_cost" readonly class="form-control" value="{{ governorates.0.shipping_cost|default:'0.00' }}">
-            </div>
-            <div class="form-group">
-                <label for="address" data-en="Address" data-ar="{% trans 'العنوان' %}">{% trans "العنوان" %}</label>
-                <textarea id="address" name="address" required class="form-control"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="notes" data-en="Notes" data-ar="{% trans 'ملاحظات' %}">{% trans "ملاحظات" %}</label>
-                <textarea id="notes" name="notes" class="form-control"></textarea>
-            </div>
+
+            <!-- عمولة المسوق (إذا كان المستخدم مسوقًا) -->
             {% if is_marketer %}
-                <div class="form-group">
-                    <label for="marketer_commission" data-en="Marketer Commission" data-ar="{% trans 'عمولة المسوق' %}">{% trans "عمولة المسوق" %}</label>
-                    <input type="number" id="marketer_commission" name="marketer_commission" step="0.01" min="0" class="form-control">
-                </div>
+            <div class="form-group">
+                <label for="marketer_commission">{% trans "عمولة المسوق لكل قطعة (جنيه)" %}:</label>
+                <input type="number" step="0.01" min="0" id="marketer_commission" name="marketer_commission" value="{{ current_marketer_commission|floatformat:2 }}" required>
+                <p style="font-size: 14px; color: #555;">({% trans "سيتم تطبيق هذه العمولة على" %} <strong>{% trans "جميع المنتجات" %}</strong> {% trans "في الطلب واستبدال أي عمولة حالية" %}.)</p>
+            </div>
             {% endif %}
-            <button type="submit" class="btn-primary" data-en="Submit Order" data-ar="{% trans 'إرسال الطلب' %}">{% trans "إرسال الطلب" %}</button>
+
+            <div class="change-link">
+                <a href="{% url 'products:cart' %}">{% trans "تغيير المحافظة أو محتويات العربة" %}</a>
+            </div>
+
+            <h2>{% trans "بيانات العميل والشحن" %}</h2>
+
+            <div class="form-group">
+                <label for="customer_name">{% trans "اسم العميل" %} <span style="color: red;">*</span></label>
+                <input type="text" id="customer_name" name="customer_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone_number">{% trans "رقم الهاتف" %} <span style="color: red;">*</span></label>
+                <input type="text" id="phone_number" name="phone_number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="secondary_phone_number">{% trans "رقم هاتف ثانٍ" %}</label>
+                <input type="text" id="secondary_phone_number" name="secondary_phone_number">
+            </div>
+
+            {% if not request.user.is_authenticated %}
+            <div class="form-group">
+                <label for="email">{% trans "البريد الإلكتروني" %} <span style="color: red;">*</span></label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label>{% trans "المحافظة" %}</label>
+                <p>{{ selected_governorate.name }}</p>
+                <input type="hidden" name="governorate" value="{{ selected_governorate.id }}">
+            </div>
+
+            <div class="form-group">
+                <label>{% trans "تكلفة الشحن" %}</label>
+                <p>{{ shipping_cost|floatformat:2 }} {% trans "جنيه" %}</p>
+            </div>
+
+            <div class="form-group">
+                <label for="address">{% trans "العنوان" %} <span style="color: red;">*</span></label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">{% trans "ملاحظات" %}</label>
+                <textarea id="notes" name="notes" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">{% trans "إرسال الطلب" %}</button>
         </form>
         {% if messages %}
             <div class="form-messages">
@@ -236,147 +245,17 @@
                 {% endfor %}
             </div>
         {% endif %}
-    </main>
+    </section>
     <footer class="footer">
-        <p>{% trans "ترافيكو © 2025" %}</p>
+        <p>{% trans "جميع الحقوق محفوظة © ترافيكو مقدم من شركة كريتيفتي كود للبرمجة 2025" %}</p>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">FB</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">IG</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">TT</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">TW</a>
+        </div>
     </footer>
-    <script src="{% static 'js/product_list.js' %}?v={% now 'U' %}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const governorateSelect = document.getElementById('governorate');
-            const shippingCostInput = document.getElementById('shipping_cost');
-            const totalPriceElement = document.getElementById('total-price');
-            const shippingCostElement = document.getElementById('shipping-cost');
-            const subtotalElement = document.getElementById('subtotal');
-
-            const cartItems = [
-                {% for item in cart_items %}
-                    {
-                        id: {{ item.id }},
-                        price: {{ item.product.base_price|floatformat:2 }},
-                        quantity: {{ item.quantity }},
-                        commission: {{ item.marketer_commission|floatformat:2 }},
-                        designer_commission: {% if item.product.design_ownership == 'designer' and item.product.design and item.product.design.status == 'approved' %}{{ item.product.design.commission_per_sale|floatformat:2 }}{% else %}0.00{% endif %},
-                        max_stock: {{ item.product.stock }},
-                        colors: {
-                            {% for color in item.product.colors.all %}
-                                "{{ color.color }}": {{ color.stock }},
-                            {% endfor %}
-                        },
-                        sizes: {
-                            {% for size in item.product.sizes.all %}
-                                "{{ size.size }}": {{ size.stock }},
-                            {% endfor %}
-                        }
-                    },
-                {% endfor %}
-            ];
-
-            function calculateTotalPrice() {
-                const shippingCost = parseFloat(shippingCostInput.value) || 0;
-                const itemsTotal = cartItems.reduce((sum, item) => {
-                    const itemPrice = parseFloat(item.price) + parseFloat(item.commission) + parseFloat(item.designer_commission);
-                    return sum + (itemPrice * item.quantity);
-                }, 0);
-                const totalPrice = itemsTotal + shippingCost;
-                subtotalElement.textContent = itemsTotal.toFixed(2);
-                shippingCostElement.textContent = shippingCost.toFixed(2);
-                totalPriceElement.textContent = totalPrice.toFixed(2);
-            }
-
-            function validateItem(itemId) {
-                const colorSelect = document.querySelector(`select[name="color_${itemId}"]`);
-                const sizeSelect = document.querySelector(`select[name="size_${itemId}"]`);
-                const quantityInput = document.querySelector(`input[name="quantity_${itemId}"]`);
-                const colorError = document.getElementById(`color-error-${itemId}`);
-                const sizeError = document.getElementById(`size-error-${itemId}`);
-                const quantityError = document.getElementById(`quantity-error-${itemId}`);
-                const item = cartItems.find(i => i.id === parseInt(itemId));
-
-                let isValid = true;
-
-                // Clear previous errors
-                colorError.textContent = '';
-                sizeError.textContent = '';
-                quantityError.textContent = '';
-
-                // Validate color
-                if (!colorSelect.value) {
-                    colorError.textContent = `{% trans "يرجى اختيار لون" %}`;
-                    isValid = false;
-                } else {
-                    const colorStock = item.colors[colorSelect.value] || 0;
-                    if (colorStock < parseInt(quantityInput.value)) {
-                        colorError.textContent = `{% trans "الكمية المطلوبة غير متوفرة لهذا اللون" %}`;
-                        isValid = false;
-                    }
-                }
-
-                // Validate size
-                if (!sizeSelect.value) {
-                    sizeError.textContent = `{% trans "يرجى اختيار مقاس" %}`;
-                    isValid = false;
-                } else {
-                    const sizeStock = item.sizes[sizeSelect.value] || 0;
-                    if (sizeStock < parseInt(quantityInput.value)) {
-                        sizeError.textContent = `{% trans "الكمية المطلوبة غير متوفرة لهذا المقاس" %}`;
-                        isValid = false;
-                    }
-                }
-
-                // Validate quantity
-                const quantity = parseInt(quantityInput.value);
-                if (isNaN(quantity) || quantity <= 0) {
-                    quantityError.textContent = `{% trans "الكمية يجب أن تكون أكبر من صفر" %}`;
-                    isValid = false;
-                } else if (quantity > item.max_stock) {
-                    quantityError.textContent = `{% trans "الكمية المطلوبة غير متوفرة في المخزون الكلي" %}`;
-                    isValid = false;
-                }
-
-                // Update item quantity in cartItems
-                if (isValid) {
-                    item.quantity = quantity;
-                }
-
-                return isValid;
-            }
-
-            // Update total price and validate on color, size, or quantity change
-            document.querySelectorAll('.color-select, .size-select, .quantity-input').forEach(element => {
-                element.addEventListener('change', () => {
-                    const itemId = element.dataset.itemId;
-                    if (validateItem(itemId)) {
-                        calculateTotalPrice();
-                    }
-                });
-            });
-
-            // Validate all items before form submission
-            document.querySelector('form').addEventListener('submit', (e) => {
-                let allValid = true;
-                cartItems.forEach(item => {
-                    if (!validateItem(item.id)) {
-                        allValid = false;
-                    }
-                });
-                if (!allValid) {
-                    e.preventDefault();
-                    alert('{% trans "يرجى تصحيح الأخطاء في العربة قبل إرسال الطلب" %}');
-                }
-            });
-
-            if (governorateSelect && shippingCostInput) {
-                governorateSelect.addEventListener('change', () => {
-                    const selectedOption = governorateSelect.options[governorateSelect.selectedIndex];
-                    const shippingCost = selectedOption.getAttribute('data-shipping-cost');
-                    shippingCostInput.value = shippingCost;
-                    calculateTotalPrice();
-                });
-                calculateTotalPrice(); // Calculate initial total
-            }
-        });
-    </script>
+    <script src="{% static 'js/create_order.js' %}?v={% now 'U' %}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const hamburger = document.querySelector('.hamburger');

@@ -1,6 +1,15 @@
-python manage.py runserver 
+python manage.py runserver
 python manage.py collectstatic
-python manage.py makemigrations 
-python manage.py migrate 
+python manage.py makemigrations
+python manage.py migrate
 python manage.py shell
 trafico_env\Scripts\activate
+ngrok http 8000
+ELAHLYclub@1907
+fly deploy --ha=false -a trafico
+fly logs -a trafico
+trafico@333666999
+fly ssh console -a trafico -C "python manage.py collectstatic --noinput"
+flyctl deploy -a trafico
+fly deploy --ha=false -a trafico
+fly logs -a trafico

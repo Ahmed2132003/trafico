@@ -18,10 +18,10 @@
     <div class="container">
         <div class="mode-toggle">
             <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}">
-                <span class="mode-icon">☀️</span>
+                <span class="mode-icon">Sun</span>
             </button>
             <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}">
-                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}Saudi Arabia{% else %}United Kingdom{% endif %}</span>
             </button>
         </div>
         <h2 data-en="Login">{% trans "تسجيل الدخول" %}</h2>
@@ -37,7 +37,18 @@
             </div>
             <button type="submit" class="btn-primary animated-button" data-en="Login">{% trans "تسجيل الدخول" %}</button>
         </form>
-        <p class="form-link" data-en="Don't have an account? <a href='{% url 'users:register' %}'>Register</a>">{% trans "ليس لديك حساب؟" %} <a href="{% url 'users:register' %}">{% trans "إنشاء حساب" %}</a></p>
+
+        <!-- الرابط ده لازم يكون برا الـ if messages -->
+        <p class="form-link">
+            {% trans "نسيت كلمة المرور؟" %} 
+            <a href="{% url 'users:forget_password' %}">{% trans "استعادة الحساب" %}</a>
+        </p>
+
+        <p class="form-link" data-en="Don't have an account? <a href='{% url 'users:register' %}'>Register</a>">
+            {% trans "ليس لديك حساب؟" %} <a href="{% url 'users:register' %}">{% trans "إنشاء حساب" %}</a>
+        </p>
+
+        <!-- رسائل الخطأ تظهر هنا -->
         {% if messages %}
             <div class="form-messages">
                 {% for message in messages %}

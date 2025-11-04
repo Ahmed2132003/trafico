@@ -1,3 +1,4 @@
+<!-- templates/products/cart.html -->
 {% load i18n static %}
 <!DOCTYPE html>
 <html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
@@ -133,7 +134,11 @@
                         <p data-en="Marketer Commission: {{ item.marketer_commission|floatformat:2 }} EGP" data-ar="{% trans 'عمولة المسوق' %}: {{ item.marketer_commission|floatformat:2 }} {% trans 'جنيه' %}">{% trans "عمولة المسوق" %}: {{ item.marketer_commission|floatformat:2 }} {% trans "جنيه" %}</p>
                         <p data-en="Total: {{ item.total_price|floatformat:2 }} EGP" data-ar="{% trans 'الإجمالي' %}: {{ item.total_price|floatformat:2 }} {% trans 'جنيه' %}">{% trans "الإجمالي" %}: {{ item.total_price|floatformat:2 }} {% trans "جنيه" %}</p>
                         <div class="button-group">
-                            <a href="{% url 'products:remove_from_cart' item.id %}" class="btn-primary" data-en="Remove from Cart" data-ar="{% trans 'حذف من العربة' %}">{% trans "حذف من العربة" %}</a>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'products:remove_from_cart' item.id %}" class="btn-primary" data-en="Remove from Cart" data-ar="{% trans 'حذف من العربة' %}">{% trans "حذف من العربة" %}</a>
+                            {% else %}
+                                <a href="{% url 'products:remove_from_cart_guest' cart_key=item.product.id|add:'_'|add:item.color|add:'_'|add:item.size %}" class="btn-primary" data-en="Remove from Cart" data-ar="{% trans 'حذف من العربة' %}">{% trans "حذف من العربة" %}</a>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}
@@ -207,6 +212,51 @@
                 }
             });
         });
+        document.addEventListener('DOMContentLoaded', () => {
+            const governorateSelect = document.getElementById('governorate');
+            const shippingInput = document.getElementById('shipping_cost');
+
+            // عند تغيير المحافظة
+            governorateSelect.addEventListener('change', async (event) => {
+                const selectedOption = event.target.selectedOptions[0];
+                const rawShippingCost = selectedOption.dataset.shippingCost || '0';
+                const shippingCost = parseFloat(rawShippingCost).toFixed(2);  // ← مهم جدًا
+                const governorateId = selectedOption.value;
+
+                shippingInput.value = shippingCost;
+
+                // إرسال البيانات للسيرفر لتخزينها في الـ session
+                try {
+                    const response = await fetch('/products/save-shipping-selection/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                        body: JSON.stringify({
+                            governorate_id: governorateId,
+                            shipping_cost: shippingCost
+                        })
+                    });
+                    const result = await response.json();
+                    if (!result.success) {
+                        console.error('Failed to save shipping:', result.error);
+                    } else {
+                        console.log('Shipping saved:', { governorateId, shippingCost });
+                    }
+                } catch (error) {
+                    console.error('Error saving shipping selection:', error);
+                }
+            });
+
+            // دالة بسيطة لجلب CSRF token
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+        });
     </script>
+    
 </body>
 </html>

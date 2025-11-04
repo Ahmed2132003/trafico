@@ -77,24 +77,24 @@
         <div class="logo-container">
             <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
         </div>
-        <button class="hamburger" aria-label="Toggle Menu">☰</button>
+        <button class="hamburger" aria-label="Toggle Menu">Menu</button>
         <div class="nav-links">
             <a href="{% url 'products:product_list' %}" class="nav-link" data-en="Products" data-ar="{% trans 'المنتجات' %}">{% trans "المنتجات" %}</a>
             <a href="{% url 'dashboard:dashboard' %}" class="nav-link" data-en="Dashboard" data-ar="{% trans 'لوحة التحكم' %}">{% trans "لوحة التحكم" %}</a>
             <a href="{% url 'dashboard:top_performers' %}" class="nav-link" data-en="Top 10 Marketers & Designers" data-ar="{% trans 'افضل المسوقين والمصممين' %}">{% trans "افضل المسوقين والمصممين" %}</a>
             <a href="{% url 'dashboard:about_us' %}" class="nav-link" data-en="About" data-ar="{% trans 'عنا' %}">{% trans "عنا" %}</a>
             <a href="{% url 'dashboard:contact_us' %}" class="nav-link" data-en="Contact Us" data-ar="{% trans 'تواصل معنا' %}">{% trans "تواصل معنا" %}</a>
-            <a href="{% url 'products:cart' %}" class="nav-link icon" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">🛒</a>
+            <a href="{% url 'products:cart' %}" class="nav-link icon" data-en="Cart" data-ar="{% trans 'عربة التسوق' %}">Cart</a>
             {% if user.is_authenticated %}
                 <a href="{% url 'users:logout' %}" class="nav-link" data-en="Logout" data-ar="{% trans 'تسجيل الخروج' %}">{% trans "تسجيل الخروج" %}</a>
             {% else %}
                 <a href="{% url 'users:login' %}" class="nav-link" data-en="Login" data-ar="{% trans 'تسجيل الدخول' %}">{% trans "تسجيل الدخول" %}</a>
             {% endif %}
             <button id="mode-toggle" class="btn-mode" title="{% trans 'تبديل إلى الوضع المظلم' %}" data-title-en="Toggle Dark Mode" data-title-ar="{% trans 'تبديل إلى الوضع المظلم' %}">
-                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}☀️{% else %}🌙{% endif %}</span>
+                <span class="mode-icon">{% if request.session.theme == 'dark-mode' %}Sun{% else %}Moon{% endif %}</span>
             </button>
             <button id="lang-toggle" class="btn-mode" title="{% trans 'تبديل اللغة' %}" data-title-en="Toggle Language" data-title-ar="{% trans 'تبديل اللغة' %}">
-                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}🇸🇦{% else %}🇬🇧{% endif %}</span>
+                <span class="lang-icon">{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == 'ar' %}Saudi Arabia{% else %}United Kingdom{% endif %}</span>
             </button>
         </div>
     </header>
@@ -113,6 +113,9 @@
                 {% endfor %}
             </div>
         {% endif %}
+
+
+        <!-- جدول الطلبات -->
         {% if orders %}
             <table>
                 <thead>
@@ -122,46 +125,70 @@
                         <th data-en="Total Price" data-ar="{% trans 'السعر الإجمالي' %}">{% trans "السعر الإجمالي" %}</th>
                         <th data-en="Status" data-ar="{% trans 'الحالة' %}">{% trans "الحالة" %}</th>
                         <th data-en="Update Status" data-ar="{% trans 'تحديث الحالة' %}">{% trans "تحديث الحالة" %}</th>
+                        <th data-en="Order Details" data-ar="{% trans 'تفاصيل الطلب' %}">{% trans "تفاصيل الطلب" %}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for order in orders %}
                         <tr>
                             <td>{{ order.id }}</td>
-                            <td>{{ order.user.username }}</td>
+                            <td>{{ order.user.username|default:"غير مسجل" }}</td>
                             <td>{{ order.total_price|floatformat:2 }} {% trans "جنيه" %}</td>
-                            <td data-en="{{ order.get_status_display|title }}" data-ar="{{ order.get_status_display }}">{{ order.get_status_display }}</td>
+                            <td data-en="{{ order.get_status_display|title }}" data-ar="{{ order.get_status_display }}">
+                                <span class="status-badge {{ order.status }}">{{ order.get_status_display }}</span>
+                            </td>
                             <td>
                                 <form method="post" action="{% url 'dashboard:manage_orders' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="order_id" value="{{ order.id }}">
-                                    <select name="status" class="form-input">
-                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %} data-en="Pending" data-ar="{% trans 'قيد المراجعة' %}">{% trans "قيد المراجعة" %}</option>
-                                        <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %} data-en="Shipped" data-ar="{% trans 'تم الشحن' %}">{% trans "تم الشحن" %}</option>
-                                        <option value="completed" {% if order.status == 'completed' %}selected{% endif %} data-en="Completed" data-ar="{% trans 'مكتمل' %}">{% trans "مكتمل" %}</option>
-                                        <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %} data-en="Cancelled" data-ar="{% trans 'ملغي' %}">{% trans "ملغي" %}</option>
+                                    <select name="status" class="form-input status-select">
+                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>{% trans "قيد المراجعة" %}</option>
+                                        <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>{% trans "تم الشحن" %}</option>
+                                        <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>{% trans "مكتمل" %}</option>
+                                        <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>{% trans "ملغي" %}</option>
                                     </select>
-                                    <button type="submit" class="btn-primary" data-en="Update" data-ar="{% trans 'تحديث' %}">{% trans "تحديث" %}</button>
+                                    <button type="submit" class="btn-primary small">{% trans "تحديث" %}</button>
                                 </form>
+                            </td>
+                            <td>
+                                <a href="{% url 'dashboard:order_detail' order.id %}" class="btn-primary small" data-en="View Details" data-ar="{% trans 'إظهار التفاصيل' %}">
+                                    {% trans "إظهار التفاصيل" %}
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+
+            <!-- التنقل بين الصفحات -->
+            {% if orders.has_other_pages %}
+                <div class="pagination">
+                    {% if orders.has_previous %}
+                        <a href="?page={{ orders.previous_page_number }}{% if period %}&period={{ period }}{% endif %}" class="page-link">Previous</a>
+                    {% endif %}
+                    <span class="page-current">{% trans "صفحة" %} {{ orders.number }} {% trans "من" %} {{ orders.paginator.num_pages }}</span>
+                    {% if orders.has_next %}
+                        <a href="?page={{ orders.next_page_number }}{% if period %}&period={{ period }}{% endif %}" class="page-link">Next</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+
         {% else %}
-            <p data-en="No orders available" data-ar="{% trans 'لا توجد طلبات' %}">{% trans "لا توجد طلبات" %}</p>
+            <p class="no-data">{% trans "لا توجد طلبات في هذه الفترة." %}</p>
         {% endif %}
-        <a href="{% url 'dashboard:dashboard' %}" class="btn-primary" data-en="Back to Dashboard" data-ar="{% trans 'رجوع إلى لوحة التحكم' %}">{% trans "رجوع إلى لوحة التحكم" %}</a>
+
+        <a href="{% url 'dashboard:dashboard' %}" class="btn-primary">{% trans "رجوع إلى لوحة التحكم" %}</a>
     </main>
     <footer class="footer">
-        <p data-en="Trafico Created by Creativity Code © 2025" data-ar="{% trans 'ترافيكو من إنشاء شركة كريتيفيتي كود © 2025' %}">{% trans "ترافيكو من إنشاء شركة كريتيفيتي كود © 2025" %}</p>
+        <p>{% trans "ترافيكو من إنشاء شركة كريتيفيتي كود © 2025" %}</p>
         <div class="social-links">
-            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">📘</a>
-            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">📸</a>
-            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">🎵</a>
-            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">🐦</a>
+            <a href="https://www.facebook.com/share/1ENADaTtSn/" class="social-btn facebook">Facebook</a>
+            <a href="https://www.instagram.com/tra7ico_12?igsh=MWxsOTRkMXljYWpkYg==" class="social-btn instagram">Instagram</a>
+            <a href="https://www.tiktok.com/@tra7ico_12?_t=ZS-8yJ8KDuPZQH&_r=1" class="social-btn tiktok">TikTok</a>
+            <a href="https://x.com/tra7ico_12?t=9Hdj7Jjg72_cgXQZpPa58Q&s=09" class="social-btn twitter">X</a>
         </div>
     </footer>
+
     <script src="{% static 'js/manage_orders.js' %}?v={% now 'U' %}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -171,20 +198,20 @@
                 
             hamburger.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
-                hamburger.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+                hamburger.textContent = navLinks.classList.contains('active') ? 'Close' : 'Menu';
             });
             
             links.forEach(link => {
                 link.addEventListener('click', () => {
                     navLinks.classList.remove('active');
-                    hamburger.textContent = '☰';
+                    hamburger.textContent = 'Menu';
                 });
             });
             
             document.addEventListener('click', (e) => {
                 if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
                     navLinks.classList.remove('active');
-                    hamburger.textContent = '☰';
+                    hamburger.textContent = 'Menu';
                 }
             });
         });

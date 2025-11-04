@@ -1,3 +1,4 @@
+<!-- templates/products/product_detail.html -->
 {% load i18n static %}
 <!DOCTYPE html>
 <html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
@@ -158,38 +159,36 @@
                     <p data-en="No sizes available" data-ar="{% trans 'لا توجد مقاسات متاحة' %}">{% trans "لا توجد مقاسات متاحة" %}</p>
                 {% endfor %}
             </div>
-            {% if user.is_authenticated %}
-                <div class="product-options">
-                    <form action="{% url 'products:add_to_cart' product.id %}" method="post" class="form-animated">
-                        {% csrf_token %}
-                        <label for="color" data-en="Select Color" data-ar="{% trans 'اختر اللون' %}">{% trans "اختر اللون" %}</label>
-                        <select name="color" required>
-                            <option value="" data-en="Choose a color" data-ar="{% trans 'اختر لونًا' %}">{% trans "اختر لونًا" %}</option>
-                            {% for color in product.colors.all %}
-                                {% if color.stock > 0 %}
-                                    <option value="{{ color.color }}">{{ color.color }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                        <label for="size" data-en="Select Size" data-ar="{% trans 'اختر المقاس' %}">{% trans "اختر المقاس" %}</label>
-                        <select name="size" required>
-                            <option value="" data-en="Choose a size" data-ar="{% trans 'اختر مقاسًا' %}">{% trans "اختر مقاسًا" %}</option>
-                            {% for size in product.sizes.all %}
-                                {% if size.stock > 0 %}
-                                    <option value="{{ size.size }}">{{ size.size }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                        <label for="quantity" data-en="Quantity" data-ar="{% trans 'الكمية' %}">{% trans "الكمية" %}</label>
-                        <input type="number" name="quantity" value="1" min="1" required class="form-input">
-                        {% if user.user_type == 'marketer' %}
-                            <label for="marketer_commission" data-en="Marketer Commission" data-ar="{% trans 'عمولة المسوق' %}">{% trans "عمولة المسوق" %}</label>
-                            <input type="number" name="marketer_commission" value="0.00" step="0.01" class="form-input">
-                        {% endif %}
-                        <button type="submit" class="btn-primary animated-button" data-en="Add to Cart" data-ar="{% trans 'إضافة إلى العربة' %}">{% trans "إضافة إلى العربة" %}</button>
-                    </form>
-                </div>
-            {% endif %}
+            <div class="product-options">
+                <form action="{% url 'products:add_to_cart' product.id %}" method="post" class="form-animated">
+                    {% csrf_token %}
+                    <label for="color" data-en="Select Color" data-ar="{% trans 'اختر اللون' %}">{% trans "اختر اللون" %}</label>
+                    <select name="color" required>
+                        <option value="" data-en="Choose a color" data-ar="{% trans 'اختر لونًا' %}">{% trans "اختر لونًا" %}</option>
+                        {% for color in product.colors.all %}
+                            {% if color.stock > 0 %}
+                                <option value="{{ color.color }}">{{ color.color }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <label for="size" data-en="Select Size" data-ar="{% trans 'اختر المقاس' %}">{% trans "اختر المقاس" %}</label>
+                    <select name="size" required>
+                        <option value="" data-en="Choose a size" data-ar="{% trans 'اختر مقاسًا' %}">{% trans "اختر مقاسًا" %}</option>
+                        {% for size in product.sizes.all %}
+                            {% if size.stock > 0 %}
+                                <option value="{{ size.size }}">{{ size.size }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <label for="quantity" data-en="Quantity" data-ar="{% trans 'الكمية' %}">{% trans "الكمية" %}</label>
+                    <input type="number" name="quantity" value="1" min="1" required class="form-input">
+                    {% if user.is_authenticated and user.user_type == 'marketer' %}
+                        <label for="marketer_commission" data-en="Marketer Commission" data-ar="{% trans 'عمولة المسوق' %}">{% trans "عمولة المسوق" %}</label>
+                        <input type="number" name="marketer_commission" value="0.00" step="0.01" class="form-input">
+                    {% endif %}
+                    <button type="submit" class="btn-primary animated-button" data-en="Add to Cart" data-ar="{% trans 'إضافة إلى العربة' %}">{% trans "إضافة إلى العربة" %}</button>
+                </form>
+            </div>
             <div class="button-group">
                 {% if user.is_authenticated %}
                     <form action="{% url 'products:add_to_favorites' product.id %}" method="post">

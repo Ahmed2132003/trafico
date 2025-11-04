@@ -73,6 +73,7 @@
     <link rel="stylesheet" href="{% static 'css/withdrawal_request.css' %}?v={% now 'U' %}">
 </head>
 <body class="{% if request.session.theme %}{{ request.session.theme }}{% else %}light-mode{% endif %}">
+
     <header class="header">
         <div class="logo-container">
             <img src="https://i.postimg.cc/FzSYsKp6/logo-1.jpg" alt="Trafico Logo" class="logo">
@@ -124,6 +125,15 @@
             
             <label for="phone_number" data-en="Phone Number" data-ar="{% trans 'رقم الهاتف' %}">{% trans "رقم الهاتف" %}:</label>
             <input type="text" id="phone_number" name="phone_number" required>
+            
+            <label for="payment_method" data-en="Payment Method" data-ar="{% trans 'طريقة السحب' %}">{% trans "طريقة السحب" %}:</label>
+            <select id="payment_method" name="payment_method" required>
+                <option value="vodafone_cash" data-en="Vodafone Cash" data-ar="{% trans 'فودافون كاش' %}">{% trans "فودافون كاش" %}</option>
+                <option value="etisalat_cash" data-en="Etisalat Cash" data-ar="{% trans 'اتصالات كاش' %}">{% trans "اتصالات كاش" %}</option>
+                <option value="orange_cash" data-en="Orange Cash" data-ar="{% trans 'أورانج كاش' %}">{% trans "أورانج كاش" %}</option>
+                <option value="we_cash" data-en="WE Cash" data-ar="{% trans 'وي كاش' %}">{% trans "وي كاش" %}</option>
+                <option value="bank_transfer" data-en="Bank Transfer" data-ar="{% trans 'تحويل بنكي' %}">{% trans "تحويل بنكي" %}</option>
+            </select>
             
             <label for="wallet_number" data-en="Wallet Number" data-ar="{% trans 'رقم المحفظة' %}">{% trans "رقم المحفظة" %}:</label>
             <input type="text" id="wallet_number" name="wallet_number" required>

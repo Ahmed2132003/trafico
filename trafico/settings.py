@@ -1,3 +1,5 @@
+import os
+import dj_database_url
 from pathlib import Path
 from datetime import timedelta
 
@@ -18,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'users.apps.UsersConfig',
     'products.apps.ProductsConfig',
     'orders.apps.OrdersConfig',
@@ -108,8 +111,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'trafico.tt12@gmail.com'
 EMAIL_HOST_PASSWORD = 'lpjj tkow dano sdes'
 
-import os
-import dj_database_url
+
 
 DATABASES = {
     "default": dj_database_url.config(

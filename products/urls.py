@@ -14,6 +14,9 @@ urlpatterns = [
     path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     path('cart/', views.cart_view, name='cart'),
     path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('cart/remove-guest/<str:cart_key>/', views.remove_from_cart_guest, name='remove_from_cart_guest'),
     path('order/create/', views.create_order, name='create_order'),
     path('set-language/<str:lang_code>/', views.set_language, name='set_language'),
+    path('products/save-shipping-selection/', views.save_shipping_selection, name='save_shipping_selection'),
+
 ]
