@@ -113,10 +113,15 @@ EMAIL_HOST_PASSWORD = 'lpjj tkow dano sdes'
 
 
 
+import dj_database_url
+from pathlib import Path
+
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default="sqlite:////data/db.sqlite3",
-        conn_max_age=600
+    'default': dj_database_url.config(
+        default='postgres://postgres:ELAHLYclub@1907@localhost:5432/trafico_db',
+        conn_max_age=600,
+        conn_health_checks=True,
     )
 }
 
